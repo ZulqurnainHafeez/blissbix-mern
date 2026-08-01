@@ -3,16 +3,18 @@ const dotenv = require("dotenv");
 const dns = require("dns");
 
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 // Load environment variables
 dotenv.config();
 
-// Force DNS servers (optional)
+// Optional: Set DNS servers
 dns.setServers([
   "1.1.1.1",
-  "8.8.8.8"
+  "8.8.8.8",
 ]);
 
 const app = express();
@@ -26,6 +28,7 @@ connectDB();
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
