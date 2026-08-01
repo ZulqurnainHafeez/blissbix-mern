@@ -7,7 +7,13 @@ const jwt = require("jsonwebtoken");
 // ===============================
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const {
+      name,
+      email,
+      password,
+      phone,
+      address,
+    } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -31,6 +37,8 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      phone,
+      address,
     });
 
     res.status(201).json({
@@ -40,18 +48,20 @@ const registerUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
+        address: user.address,
         role: user.role,
         createdAt: user.createdAt,
       },
     });
   } catch (error) {
-  console.error("ERROR:", error);
+    console.error("ERROR:", error);
 
-  res.status(500).json({
-    success: false,
-    message: error.message,
-  });
-}
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 // ===============================
@@ -61,7 +71,6 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check required fields
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -69,7 +78,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Find user
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -79,7 +87,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -89,7 +96,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Generate JWT
     const token = jwt.sign(
       {
         id: user._id,
@@ -109,17 +115,19 @@ const loginUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
+        address: user.address,
         role: user.role,
       },
     });
   } catch (error) {
-  console.error("ERROR:", error);
+    console.error("ERROR:", error);
 
-  res.status(500).json({
-    success: false,
-    message: error.message,
-  });
-}
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {
