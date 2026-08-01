@@ -4,6 +4,7 @@ const dns = require("dns");
 
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -13,9 +14,6 @@ dns.setServers([
   "1.1.1.1",
   "8.8.8.8"
 ]);
-
-// Check if JWT_SECRET is loaded
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const app = express();
 
@@ -27,6 +25,7 @@ connectDB();
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
@@ -41,5 +40,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(` Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
