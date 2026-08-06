@@ -7,7 +7,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
-const categoryRoutes = require("./routes/categoryRoutes"); // NEW
+const categoryRoutes = require("./routes/categoryRoutes");
+const cartRoutes = require("./routes/cartRoutes"); // NEW
 
 // Load environment variables
 dotenv.config();
@@ -30,7 +31,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/categories", categoryRoutes); // NEW
+app.use("/api/categories", categoryRoutes);
+app.use("/api/cart", cartRoutes); // NEW
 
 // Home Route
 app.get("/", (req, res) => {
