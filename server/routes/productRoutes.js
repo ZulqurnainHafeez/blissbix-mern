@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   createProduct,
+  getProducts,
 } = require("../controllers/productController");
 
 const {
@@ -11,6 +12,10 @@ const {
 
 const router = express.Router();
 
+// Public Route
+router.get("/", getProducts);
+
+// Admin Route
 router.post("/", protect, admin, createProduct);
 
 module.exports = router;

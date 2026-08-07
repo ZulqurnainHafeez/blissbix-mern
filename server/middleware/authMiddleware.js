@@ -1,33 +1,32 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+// Protect Routes
 const protect = async (req, res, next) => {
   try {
-    console.log("Authorization Header:", req.headers.authorization);
-
     let token;
 
     if (
       req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
+      req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
 
-      console.log("Token:", token);
-
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      console.log("Decoded:", decoded);
+      console.log("Decoded Token:", decoded);
 
       req.user = await User.findById(decoded.id).select("-password");
 
-      return next();
-    }
+      console.log("User from DB:", req.user);
 
-    return res.status(401).json({
-      success: false,
-      message: "No token, authorization denied",
-    });
+      next();
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "No token, authorization denied",
+      });
+    }
   } catch (error) {
     console.log(error);
 
@@ -38,7 +37,10 @@ const protect = async (req, res, next) => {
   }
 };
 
+// Admin Middleware
 const admin = (req, res, next) => {
+  console.log("User Role:", req.user?.role);
+
   if (req.user && req.user.role === "admin") {
     return next();
   }
