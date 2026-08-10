@@ -1,0 +1,206 @@
+.shop-page {
+  min-height: 70vh;
+  background: #fff;
+}
+
+/* =========================
+   SHOP HEADER
+========================= */
+
+.shop-header {
+  text-align: center;
+  padding: 70px 20px 50px;
+  background: #fdf1f5;
+}
+
+.shop-header p {
+  margin: 0 0 10px;
+  color: #c2185b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.shop-header h1 {
+  margin: 0 0 12px;
+  font-size: 42px;
+  color: #111;
+}
+
+.shop-header span {
+  color: #666;
+  font-size: 16px;
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+.products-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* =========================
+   PRODUCT CARD
+========================= */
+
+.product-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  transition: 0.25s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.product-image {
+  height: 260px;
+  background: #f9e8ee;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-image span {
+  font-size: 75px;
+}
+
+/* =========================
+   PRODUCT INFO
+========================= */
+
+.product-info {
+  padding: 20px;
+}
+
+.product-category {
+  margin: 0 0 7px;
+  color: #c2185b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.product-info h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #111;
+}
+
+.product-description {
+  min-height: 45px;
+  margin: 0 0 15px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.product-bottom strong {
+  color: #111;
+  font-size: 17px;
+}
+
+.product-bottom span {
+  color: #777;
+  font-size: 13px;
+}
+
+.view-product {
+  display: block;
+  width: 100%;
+  padding: 11px 0;
+
+  text-align: center;
+  background: #111;
+  color: #fff;
+
+  text-decoration: none;
+  border-radius: 5px;
+
+  transition: 0.2s;
+}
+
+.view-product:hover {
+  background: #c2185b;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+.shop-message {
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.shop-message h2 {
+  color: #333;
+}
+
+.shop-message.error h2 {
+  color: #c2185b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 750px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .shop-header h1 {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 500px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .products-section {
+    padding: 40px 16px;
+  }
+}
