@@ -12,87 +12,87 @@ const products = [
   },
 
   {
-    name: "Vitamin C Face Serum",
+    name: "COSRX Sunscreen",
     description:
-      "Brightening Vitamin C serum designed to give skin a fresh and glowing appearance.",
+      "Lightweight daily sunscreen that helps protect the skin from harmful UV rays while keeping it comfortable.",
     price: 2499,
     category: "Skincare",
-    images: ["/products/vitamin-c-serum.jpg"],
-    sizes: ["30ml"],
+    images: ["/products/cosrx-sunscreen.webp"],
+    sizes: ["50ml"],
     colors: [],
     stock: 20,
   },
 
   {
-    name: "Gentle Face Wash",
+    name: "TIRTIR Cleansing Balm",
     description:
-      "A gentle daily cleanser that removes dirt, excess oil and impurities while leaving skin refreshed.",
-    price: 1299,
+      "Gentle cleansing balm designed to remove makeup and impurities while leaving the skin feeling clean and soft.",
+    price: 2899,
     category: "Skincare",
-    images: ["/products/face-wash.jpg"],
-    sizes: ["100ml", "200ml"],
+    images: ["/products/tirtir-cleansing-balm.webp"],
+    sizes: ["100ml"],
+    colors: [],
+    stock: 15,
+  },
+
+  {
+    name: "Urban Decay Eyeshadow Palette",
+    description:
+      "Beautiful eyeshadow palette featuring versatile shades for creating everyday and glamorous makeup looks.",
+    price: 4999,
+    category: "Makeup",
+    images: ["/products/urban-decay-palette.webp"],
+    sizes: ["Standard"],
+    colors: ["Multi"],
+    stock: 12,
+  },
+
+  {
+    name: "Vaseline Gluta-Hya Lotion",
+    description:
+      "Moisturizing body lotion formulated to help keep skin soft, smooth and hydrated.",
+    price: 1899,
+    category: "Body Care",
+    images: ["/products/vaseline-gluta-hya.jpg"],
+    sizes: ["200ml", "400ml"],
     colors: [],
     stock: 30,
   },
 
   {
-    name: "Rose Body Mist",
+    name: "The Ordinary Serum",
     description:
-      "A refreshing rose-scented body mist with a soft floral fragrance for everyday use.",
-    price: 1799,
-    category: "Fragrance",
-    images: ["/products/rose-body-mist.jpg"],
-    sizes: ["100ml", "200ml"],
+      "Lightweight facial serum designed to complement your daily skincare routine.",
+    price: 2299,
+    category: "Skincare",
+    images: ["/products/ordinary-serum.jpg"],
+    sizes: ["30ml"],
     colors: [],
     stock: 18,
   },
 
   {
-    name: "Nail Polish",
+    name: "Pink Body Mist",
     description:
-      "Smooth and glossy nail polish available in beautiful shades.",
-    price: 799,
-    category: "Nails",
-    images: ["/products/nail-polish.jpg"],
-    sizes: ["Standard"],
-    colors: ["Red", "Pink", "Nude", "Wine", "Black"],
-    stock: 40,
-  },
-
-  {
-    name: "Waterproof Mascara",
-    description:
-      "Water-resistant mascara designed to define and enhance the appearance of lashes.",
-    price: 1599,
-    category: "Makeup",
-    images: ["/products/mascara.jpg"],
-    sizes: ["Standard"],
-    colors: ["Black", "Brown"],
-    stock: 22,
-  },
-
-  {
-    name: "Daily Moisturizer",
-    description:
-      "Lightweight daily moisturizer that helps keep skin soft, smooth and hydrated.",
-    price: 1999,
-    category: "Skincare",
-    images: ["/products/moisturizer.jpg"],
-    sizes: ["50ml", "100ml"],
+      "Refreshing body mist with a soft and pleasant fragrance for everyday use.",
+    price: 1799,
+    category: "Fragrance",
+    images: ["/products/pink-body-mist.jpg"],
+    sizes: ["100ml"],
     colors: [],
-    stock: 25,
+    stock: 20,
   },
 
   {
-    name: "Daily Sunscreen",
+    name: "CeraVe Moisturizing Lotion",
     description:
-      "Lightweight daily sunscreen designed for everyday skincare.",
-    price: 2199,
+      "Daily moisturizing lotion designed to help keep skin hydrated, soft and comfortable.",
+    price: 2999,
     category: "Skincare",
-    images: ["/products/sunscreen.jpg"],
-    sizes: ["50ml", "100ml"],
+    images: ["/products/cerave-moisturizing-lotion.jpg"],
+    sizes: ["236ml", "473ml"],
     colors: [],
-    stock: 30,
+    stock: 15,
   },
 ];
 
