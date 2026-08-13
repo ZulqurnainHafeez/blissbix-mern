@@ -1,38 +1,51 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import api from "../api/api";
+import { useCart } from "../context/CartContext";
 import "./ProductDetails.css";
 
 function ProductDetails() {
   const { id } = useParams();
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
+  const [selectedImage, setSelectedImage] = useState(0);
 
   const [message, setMessage] = useState("");
+
+  const [wishlist, setWishlist] = useState([]);
+
+  /* =========================
+     LOAD PRODUCT
+  ========================= */
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await api.get(`/products/${id}`);
+        setLoading(true);
+        setError("");
 
-        console.log("Product details:", response.data);
+        const response = await api.get(`/products/${id}`);
 
         const productData = response.data.product;
 
         setProduct(productData);
 
-        // Don't automatically select size.
-        // This allows us to validate size before adding to cart.
         if (productData?.colors?.length > 0) {
           setSelectedColor(productData.colors[0]);
         }
+
+        if (productData?.sizes?.length > 0) {
+          setSelectedSize(productData.sizes[0]);
+        }
+
+        setSelectedImage(0);
       } catch (error) {
         console.error("Product details error:", error);
 
@@ -49,18 +62,36 @@ function ProductDetails() {
   }, [id]);
 
   /* =========================
+     LOAD WISHLIST
+  ========================= */
+
+  useEffect(() => {
+    try {
+      const savedWishlist =
+        JSON.parse(
+          localStorage.getItem("blissbix-wishlist")
+        ) || [];
+
+      setWishlist(savedWishlist);
+    } catch (error) {
+      console.error("Error loading wishlist:", error);
+      setWishlist([]);
+    }
+  }, []);
+
+  /* =========================
      QUANTITY
   ========================= */
 
   const increaseQuantity = () => {
     if (product && quantity < product.stock) {
-      setQuantity((previous) => previous + 1);
+      setQuantity((current) => current + 1);
     }
   };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      setQuantity((previous) => previous - 1);
+      setQuantity((current) => current - 1);
     }
   };
 
@@ -69,62 +100,26 @@ function ProductDetails() {
   ========================= */
 
   const handleAddToCart = () => {
-    if (!product) return;
-
-    if (product.stock <= 0) {
-      setMessage("This product is currently out of stock.");
+    if (!product || product.stock <= 0) {
       return;
     }
 
-    if (product.sizes?.length > 0 && !selectedSize) {
-      setMessage("Please select a size first.");
+    if (
+      product.sizes?.length > 0 &&
+      !selectedSize
+    ) {
+      setMessage("Please select a size.");
       return;
     }
 
-    if (product.colors?.length > 0 && !selectedColor) {
-      setMessage("Please select a color first.");
-      return;
-    }
-
-    const cartItem = {
-      productId: product._id,
-      name: product.name,
-      price: product.price,
-      image: product.images?.[0] || "",
+    addToCart(
+      product,
       quantity,
-      size: selectedSize,
-      color: selectedColor,
-    };
-
-    const existingCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
-
-    const existingIndex = existingCart.findIndex(
-      (item) =>
-        item.productId === cartItem.productId &&
-        item.size === cartItem.size &&
-        item.color === cartItem.color
+      selectedColor,
+      selectedSize
     );
 
-    if (existingIndex !== -1) {
-      existingCart[existingIndex].quantity += quantity;
-
-      if (
-        existingCart[existingIndex].quantity >
-        product.stock
-      ) {
-        existingCart[existingIndex].quantity = product.stock;
-      }
-    } else {
-      existingCart.push(cartItem);
-    }
-
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(existingCart)
-    );
-
-    setMessage("✓ Product added to cart successfully!");
+    setMessage("Product added to cart successfully.");
 
     setTimeout(() => {
       setMessage("");
@@ -132,45 +127,47 @@ function ProductDetails() {
   };
 
   /* =========================
-     ADD TO WISHLIST
+     WISHLIST
   ========================= */
 
-  const handleAddToWishlist = () => {
+  const isWishlisted = wishlist.some(
+    (item) => item.productId === product?._id
+  );
+
+  const handleWishlist = () => {
     if (!product) return;
 
-    const wishlist =
-      JSON.parse(localStorage.getItem("wishlist")) || [];
+    let updatedWishlist;
 
-    const alreadyExists = wishlist.some(
-      (item) => item.productId === product._id
-    );
+    if (isWishlisted) {
+      updatedWishlist = wishlist.filter(
+        (item) => item.productId !== product._id
+      );
 
-    if (alreadyExists) {
-      setMessage("♡ Product is already in your wishlist.");
+      setMessage("Removed from wishlist.");
+    } else {
+      const wishlistItem = {
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        image: product.images?.[0] || "",
+        category: product.category,
+      };
 
-      setTimeout(() => {
-        setMessage("");
-      }, 2500);
+      updatedWishlist = [
+        ...wishlist,
+        wishlistItem,
+      ];
 
-      return;
+      setMessage("Added to wishlist.");
     }
 
-    const wishlistItem = {
-      productId: product._id,
-      name: product.name,
-      price: product.price,
-      image: product.images?.[0] || "",
-      category: product.category,
-    };
-
-    wishlist.push(wishlistItem);
+    setWishlist(updatedWishlist);
 
     localStorage.setItem(
-      "wishlist",
-      JSON.stringify(wishlist)
+      "blissbix-wishlist",
+      JSON.stringify(updatedWishlist)
     );
-
-    setMessage("♥ Product added to wishlist!");
 
     setTimeout(() => {
       setMessage("");
@@ -183,12 +180,12 @@ function ProductDetails() {
 
   if (loading) {
     return (
-      <div className="product-message">
+      <main className="product-message">
         <div>
           <div className="loading-spinner"></div>
           <h2>Loading product...</h2>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -198,85 +195,74 @@ function ProductDetails() {
 
   if (error) {
     return (
-      <div className="product-message error">
+      <main className="product-message error">
         <div>
+          <div className="error-icon">!</div>
+
           <h2>{error}</h2>
-          <Link to="/shop" className="back-shop">
+
+          <Link
+            to="/shop"
+            className="back-to-shop"
+          >
             Back to Shop
           </Link>
         </div>
-      </div>
+      </main>
     );
   }
 
   /* =========================
-     PRODUCT NOT FOUND
+     NOT FOUND
   ========================= */
 
   if (!product) {
     return (
-      <div className="product-message">
+      <main className="product-message">
         <div>
           <h2>Product not found.</h2>
 
-          <Link to="/shop" className="back-shop">
+          <Link
+            to="/shop"
+            className="back-to-shop"
+          >
             Back to Shop
           </Link>
         </div>
-      </div>
+      </main>
     );
   }
 
   const images =
-    product.images && product.images.length > 0
+    product.images?.length > 0
       ? product.images
       : [];
+
+  const currentImage =
+    images[selectedImage] || "";
+
+  /* =========================
+     PAGE
+  ========================= */
 
   return (
     <main className="product-details-page">
 
-      {/* Breadcrumb */}
-      <div className="product-breadcrumb">
-        <Link to="/">Home</Link>
-        <span>/</span>
-        <Link to="/shop">Shop</Link>
-        <span>/</span>
-        <strong>{product.name}</strong>
-      </div>
-
       <div className="product-details-container">
 
         {/* =========================
-            IMAGE GALLERY
+            GALLERY
         ========================= */}
 
-        <div className="details-gallery">
+        <div className="product-gallery">
 
-          <div className="details-image">
+          <div className="thumbnail-list">
+
             {images.length > 0 ? (
-              <img
-                src={images[selectedImage]}
-                alt={product.name}
-              />
-            ) : (
-              <div className="image-placeholder">
-                💄
-              </div>
-            )}
-
-            {product.stock <= 0 && (
-              <span className="out-of-stock-badge">
-                Out of Stock
-              </span>
-            )}
-          </div>
-
-          {images.length > 1 && (
-            <div className="image-thumbnails">
-              {images.map((image, index) => (
+              images.map((image, index) => (
                 <button
-                  key={image}
                   type="button"
+                  key={index}
                   className={
                     selectedImage === index
                       ? "thumbnail active"
@@ -291,9 +277,30 @@ function ProductDetails() {
                     alt={`${product.name} ${index + 1}`}
                   />
                 </button>
-              ))}
-            </div>
-          )}
+              ))
+            ) : (
+              <div className="thumbnail-placeholder">
+                💄
+              </div>
+            )}
+
+          </div>
+
+          <div className="details-image">
+
+            {currentImage ? (
+              <img
+                src={currentImage}
+                alt={product.name}
+              />
+            ) : (
+              <div className="image-placeholder">
+                💄
+              </div>
+            )}
+
+          </div>
+
         </div>
 
         {/* =========================
@@ -309,145 +316,162 @@ function ProductDetails() {
           <h1>{product.name}</h1>
 
           <div className="details-price">
-            Rs. {product.price.toLocaleString()}
+            Rs. {Number(product.price).toLocaleString()}
           </div>
 
           <p className="details-description">
-            {product.description}
+            {product.description ||
+              "Premium quality beauty product from Blissbix Cosmetics."}
           </p>
 
-          {/* Stock */}
+          {/* STOCK */}
+
           <div
             className={
               product.stock > 0
                 ? "details-stock"
-                : "details-stock out"
+                : "details-stock out-of-stock"
             }
           >
             {product.stock > 0
-              ? `✓ ${product.stock} items available`
-              : "✕ Currently out of stock"}
+              ? `${product.stock} items available`
+              : "Out of stock"}
           </div>
 
-          {/* =========================
-              COLORS
-          ========================= */}
+          {/* COLOR */}
 
-          {product.colors &&
-            product.colors.length > 0 && (
-              <div className="option-group">
-                <div className="option-title">
-                  <h3>Color</h3>
-                  <span>{selectedColor}</span>
-                </div>
+          {product.colors?.length > 0 && (
+            <div className="option-group">
 
-                <div className="options">
-                  {product.colors.map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      className={
-                        selectedColor === color
-                          ? "option active"
-                          : "option"
-                      }
-                      onClick={() =>
-                        setSelectedColor(color)
-                      }
-                    >
-                      {color}
-                    </button>
-                  ))}
-                </div>
+              <div className="option-heading">
+                <h3>Color</h3>
+                <span>
+                  {selectedColor}
+                </span>
               </div>
-            )}
 
-          {/* =========================
-              SIZES
-          ========================= */}
+              <div className="color-options">
 
-          {product.sizes &&
-            product.sizes.length > 0 && (
-              <div className="option-group">
+                {product.colors.map((color) => (
+                  <button
+                    type="button"
+                    key={color}
+                    className={
+                      selectedColor === color
+                        ? "color-option active"
+                        : "color-option"
+                    }
+                    onClick={() =>
+                      setSelectedColor(color)
+                    }
+                  >
+                    <span
+                      className="color-dot"
+                      style={{
+                        backgroundColor:
+                          color.toLowerCase(),
+                      }}
+                    ></span>
 
-                <div className="option-title">
-                  <h3>Size</h3>
-
-                  {!selectedSize && (
-                    <span className="required">
-                      Required
-                    </span>
-                  )}
-                </div>
-
-                <div className="options">
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size}
-                      type="button"
-                      className={
-                        selectedSize === size
-                          ? "option active"
-                          : "option"
-                      }
-                      onClick={() =>
-                        setSelectedSize(size)
-                      }
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-          {/* =========================
-              QUANTITY
-          ========================= */}
-
-          {product.stock > 0 && (
-            <div className="quantity-group">
-              <h3>Quantity</h3>
-
-              <div className="quantity-control">
-
-                <button
-                  type="button"
-                  onClick={decreaseQuantity}
-                  disabled={quantity <= 1}
-                >
-                  −
-                </button>
-
-                <span>{quantity}</span>
-
-                <button
-                  type="button"
-                  onClick={increaseQuantity}
-                  disabled={
-                    quantity >= product.stock
-                  }
-                >
-                  +
-                </button>
+                    {color}
+                  </button>
+                ))}
 
               </div>
+
             </div>
           )}
 
-          {/* =========================
-              MESSAGE
-          ========================= */}
+          {/* SIZE */}
+
+          {product.sizes?.length > 0 && (
+            <div className="option-group">
+
+              <div className="option-heading">
+                <h3>
+                  Size
+                  <span className="required">
+                    *
+                  </span>
+                </h3>
+
+                <span>
+                  {selectedSize || "Select size"}
+                </span>
+              </div>
+
+              <div className="options">
+
+                {product.sizes.map((size) => (
+                  <button
+                    type="button"
+                    key={size}
+                    className={
+                      selectedSize === size
+                        ? "option active"
+                        : "option"
+                    }
+                    onClick={() =>
+                      setSelectedSize(size)
+                    }
+                  >
+                    {size}
+                  </button>
+                ))}
+
+              </div>
+
+              {!selectedSize && (
+                <p className="size-hint">
+                  Please select a size.
+                </p>
+              )}
+
+            </div>
+          )}
+
+          {/* QUANTITY */}
+
+          <div className="quantity-group">
+
+            <h3>Quantity</h3>
+
+            <div className="quantity-control">
+
+              <button
+                type="button"
+                onClick={decreaseQuantity}
+                disabled={quantity <= 1}
+              >
+                −
+              </button>
+
+              <span>{quantity}</span>
+
+              <button
+                type="button"
+                onClick={increaseQuantity}
+                disabled={
+                  product.stock <= 0 ||
+                  quantity >= product.stock
+                }
+              >
+                +
+              </button>
+
+            </div>
+
+          </div>
+
+          {/* MESSAGE */}
 
           {message && (
-            <div className="product-action-message">
+            <div className="action-message">
               {message}
             </div>
           )}
 
-          {/* =========================
-              ACTION BUTTONS
-          ========================= */}
+          {/* ACTIONS */}
 
           <div className="product-actions">
 
@@ -464,45 +488,33 @@ function ProductDetails() {
 
             <button
               type="button"
-              className="wishlist-button"
-              onClick={handleAddToWishlist}
+              className={
+                isWishlisted
+                  ? "wishlist-button active"
+                  : "wishlist-button"
+              }
+              onClick={handleWishlist}
             >
-              ♡ Add to Wishlist
+              {isWishlisted
+                ? "♥ In Wishlist"
+                : "♡ Add to Wishlist"}
             </button>
 
           </div>
 
-          {/* Small benefits */}
-          <div className="product-benefits">
+          {/* VIEW CART */}
 
-            <div>
-              <span>✓</span>
-              <p>
-                <strong>Authentic Products</strong>
-                <small>100% genuine beauty products</small>
-              </p>
-            </div>
-
-            <div>
-              <span>✓</span>
-              <p>
-                <strong>Secure Shopping</strong>
-                <small>Your information is protected</small>
-              </p>
-            </div>
-
-            <div>
-              <span>✓</span>
-              <p>
-                <strong>Easy Shopping</strong>
-                <small>Simple and convenient ordering</small>
-              </p>
-            </div>
-
-          </div>
+          <Link
+            to="/cart"
+            className="view-cart-link"
+          >
+            View Cart →
+          </Link>
 
         </div>
+
       </div>
+
     </main>
   );
 }

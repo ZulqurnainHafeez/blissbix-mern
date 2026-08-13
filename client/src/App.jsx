@@ -11,22 +11,38 @@ import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
+
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
+      <CartProvider>
+        <WishlistProvider>
+          <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route
+              path="/product/:id"
+              element={<ProductDetails />}
+            />
+            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/wishlist"
+              element={<Wishlist />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/register"
+              element={<Register />}
+            />
+          </Routes>
 
-      <Footer />
+          <Footer />
+        </WishlistProvider>
+      </CartProvider>
     </BrowserRouter>
   );
 }
