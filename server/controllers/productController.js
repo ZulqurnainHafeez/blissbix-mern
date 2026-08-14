@@ -2,7 +2,14 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product");
 
 // ===============================
-// Create Product
+// REGEX HELPER
+// ===============================
+const escapeRegex = (value) => {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
+// ===============================
+// CREATE PRODUCT
 // ===============================
 const createProduct = async (req, res) => {
   try {
@@ -17,6 +24,8 @@ const createProduct = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.error("Create product error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -25,20 +34,189 @@ const createProduct = async (req, res) => {
 };
 
 // ===============================
-// Get All Products
+// GET ALL PRODUCTS
+// SEARCH + FILTER + SORT
 // ===============================
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find()
+    const {
+      search,
+      category,
+      size,
+      color,
+      minPrice,
+      maxPrice,
+      sort,
+    } = req.query;
+
+    // ===============================
+    // BUILD FILTER
+    // ===============================
+
+    const filter = {};
+
+    // ===============================
+    // SEARCH
+    // ===============================
+
+    if (search && search.trim() !== "") {
+      const searchRegex = new RegExp(
+        escapeRegex(search.trim()),
+        "i"
+      );
+
+      filter.$or = [
+        { name: searchRegex },
+        { category: searchRegex },
+        { description: searchRegex },
+      ];
+    }
+
+    // ===============================
+    // CATEGORY FILTER
+    // ===============================
+
+    if (category && category !== "All") {
+      filter.category = new RegExp(
+        `^${escapeRegex(category.trim())}$`,
+        "i"
+      );
+    }
+
+    // ===============================
+    // SIZE FILTER
+    // ===============================
+
+    if (size && size !== "All") {
+      filter.sizes = new RegExp(
+        `^${escapeRegex(size.trim())}$`,
+        "i"
+      );
+    }
+
+    // ===============================
+    // COLOR FILTER
+    // ===============================
+
+    if (color && color !== "All") {
+      filter.colors = new RegExp(
+        `^${escapeRegex(color.trim())}$`,
+        "i"
+      );
+    }
+
+    // ===============================
+    // PRICE FILTER
+    // ===============================
+
+    const min = Number(minPrice);
+    const max = Number(maxPrice);
+
+    if (
+      minPrice !== undefined &&
+      minPrice !== "" &&
+      !Number.isNaN(min)
+    ) {
+      filter.price = {
+        ...filter.price,
+        $gte: min,
+      };
+    }
+
+    if (
+      maxPrice !== undefined &&
+      maxPrice !== "" &&
+      !Number.isNaN(max)
+    ) {
+      filter.price = {
+        ...filter.price,
+        $lte: max,
+      };
+    }
+
+    // ===============================
+    // SORT
+    // ===============================
+
+    let sortOption = {
+      createdAt: -1,
+    };
+
+    switch (sort) {
+      case "price_asc":
+        sortOption = {
+          price: 1,
+        };
+        break;
+
+      case "price_desc":
+        sortOption = {
+          price: -1,
+        };
+        break;
+
+      case "newest":
+        sortOption = {
+          createdAt: -1,
+        };
+        break;
+
+      case "oldest":
+        sortOption = {
+          createdAt: 1,
+        };
+        break;
+
+      case "name_asc":
+        sortOption = {
+          name: 1,
+        };
+        break;
+
+      case "name_desc":
+        sortOption = {
+          name: -1,
+        };
+        break;
+
+      default:
+        sortOption = {
+          createdAt: -1,
+        };
+    }
+
+    // ===============================
+    // DATABASE QUERY
+    // ===============================
+
+    const products = await Product.find(filter)
       .populate("createdBy", "name email")
-      .sort({ createdAt: -1 });
+      .sort(sortOption);
+
+    // ===============================
+    // RESPONSE
+    // ===============================
 
     res.status(200).json({
       success: true,
+
       count: products.length,
+
+      filters: {
+        search: search || "",
+        category: category || "All",
+        size: size || "All",
+        color: color || "All",
+        minPrice: minPrice || "",
+        maxPrice: maxPrice || "",
+        sort: sort || "newest",
+      },
+
       products,
     });
   } catch (error) {
+    console.error("Get products error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -47,7 +225,7 @@ const getProducts = async (req, res) => {
 };
 
 // ===============================
-// Get Single Product
+// GET SINGLE PRODUCT
 // ===============================
 const getProductById = async (req, res) => {
   try {
@@ -77,6 +255,8 @@ const getProductById = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.error("Get product by ID error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -85,7 +265,7 @@ const getProductById = async (req, res) => {
 };
 
 // ===============================
-// ADMIN: Update Product
+// ADMIN: UPDATE PRODUCT
 // ===============================
 const updateProduct = async (req, res) => {
   try {
@@ -132,6 +312,8 @@ const updateProduct = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.error("Update product error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -140,7 +322,7 @@ const updateProduct = async (req, res) => {
 };
 
 // ===============================
-// ADMIN: Update Product Stock
+// ADMIN: UPDATE PRODUCT STOCK
 // ===============================
 const updateProductStock = async (req, res) => {
   try {
@@ -154,10 +336,15 @@ const updateProductStock = async (req, res) => {
       });
     }
 
-    if (stock === undefined || stock < 0) {
+    if (
+      stock === undefined ||
+      typeof stock !== "number" ||
+      stock < 0
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Stock must be a number greater than or equal to 0",
+        message:
+          "Stock must be a number greater than or equal to 0",
       });
     }
 
@@ -180,6 +367,8 @@ const updateProductStock = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.error("Update stock error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -188,7 +377,7 @@ const updateProductStock = async (req, res) => {
 };
 
 // ===============================
-// ADMIN: Update Product Options
+// ADMIN: UPDATE PRODUCT OPTIONS
 // ===============================
 const updateProductOptions = async (req, res) => {
   try {
@@ -241,6 +430,8 @@ const updateProductOptions = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.error("Update product options error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -249,7 +440,7 @@ const updateProductOptions = async (req, res) => {
 };
 
 // ===============================
-// ADMIN: Delete Product
+// ADMIN: DELETE PRODUCT
 // ===============================
 const deleteProduct = async (req, res) => {
   try {
@@ -278,6 +469,8 @@ const deleteProduct = async (req, res) => {
       message: "Product deleted successfully",
     });
   } catch (error) {
+    console.error("Delete product error:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -285,6 +478,9 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// ===============================
+// EXPORTS
+// ===============================
 module.exports = {
   createProduct,
   getProducts,
