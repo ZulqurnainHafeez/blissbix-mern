@@ -18,12 +18,7 @@ function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState(0);
 
   const [message, setMessage] = useState("");
-
   const [wishlist, setWishlist] = useState([]);
-
-  /* =========================
-     LOAD PRODUCT
-  ========================= */
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -31,23 +26,33 @@ function ProductDetails() {
         setLoading(true);
         setError("");
 
-        const response = await api.get(`/products/${id}`);
+        const response = await api.get(
+          `/products/${id}`
+        );
 
-        const productData = response.data.product;
+        const productData =
+          response.data.product;
 
         setProduct(productData);
 
         if (productData?.colors?.length > 0) {
-          setSelectedColor(productData.colors[0]);
+          setSelectedColor(
+            productData.colors[0]
+          );
         }
 
         if (productData?.sizes?.length > 0) {
-          setSelectedSize(productData.sizes[0]);
+          setSelectedSize(
+            productData.sizes[0]
+          );
         }
 
         setSelectedImage(0);
       } catch (error) {
-        console.error("Product details error:", error);
+        console.error(
+          "Product details error:",
+          error
+        );
 
         setError(
           error.response?.data?.message ||
@@ -61,43 +66,44 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  /* =========================
-     LOAD WISHLIST
-  ========================= */
-
   useEffect(() => {
     try {
       const savedWishlist =
         JSON.parse(
-          localStorage.getItem("blissbix-wishlist")
+          localStorage.getItem(
+            "blissbix-wishlist"
+          )
         ) || [];
 
       setWishlist(savedWishlist);
     } catch (error) {
-      console.error("Error loading wishlist:", error);
+      console.error(
+        "Error loading wishlist:",
+        error
+      );
+
       setWishlist([]);
     }
   }, []);
 
-  /* =========================
-     QUANTITY
-  ========================= */
-
   const increaseQuantity = () => {
-    if (product && quantity < product.stock) {
-      setQuantity((current) => current + 1);
+    if (
+      product &&
+      quantity < product.stock
+    ) {
+      setQuantity(
+        (current) => current + 1
+      );
     }
   };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      setQuantity((current) => current - 1);
+      setQuantity(
+        (current) => current - 1
+      );
     }
   };
-
-  /* =========================
-     ADD TO CART
-  ========================= */
 
   const handleAddToCart = () => {
     if (!product || product.stock <= 0) {
@@ -108,7 +114,9 @@ function ProductDetails() {
       product.sizes?.length > 0 &&
       !selectedSize
     ) {
-      setMessage("Please select a size.");
+      setMessage(
+        "Please select a size."
+      );
       return;
     }
 
@@ -119,19 +127,18 @@ function ProductDetails() {
       selectedSize
     );
 
-    setMessage("Product added to cart successfully.");
+    setMessage(
+      "Product added to cart successfully."
+    );
 
     setTimeout(() => {
       setMessage("");
     }, 2500);
   };
 
-  /* =========================
-     WISHLIST
-  ========================= */
-
   const isWishlisted = wishlist.some(
-    (item) => item.productId === product?._id
+    (item) =>
+      item.productId === product?._id
   );
 
   const handleWishlist = () => {
@@ -140,18 +147,25 @@ function ProductDetails() {
     let updatedWishlist;
 
     if (isWishlisted) {
-      updatedWishlist = wishlist.filter(
-        (item) => item.productId !== product._id
-      );
+      updatedWishlist =
+        wishlist.filter(
+          (item) =>
+            item.productId !==
+            product._id
+        );
 
-      setMessage("Removed from wishlist.");
+      setMessage(
+        "Removed from wishlist."
+      );
     } else {
       const wishlistItem = {
         productId: product._id,
         name: product.name,
         price: product.price,
-        image: product.images?.[0] || "",
-        category: product.category,
+        image:
+          product.images?.[0] || "",
+        category:
+          product.category,
       };
 
       updatedWishlist = [
@@ -159,24 +173,24 @@ function ProductDetails() {
         wishlistItem,
       ];
 
-      setMessage("Added to wishlist.");
+      setMessage(
+        "Added to wishlist."
+      );
     }
 
     setWishlist(updatedWishlist);
 
     localStorage.setItem(
       "blissbix-wishlist",
-      JSON.stringify(updatedWishlist)
+      JSON.stringify(
+        updatedWishlist
+      )
     );
 
     setTimeout(() => {
       setMessage("");
     }, 2500);
   };
-
-  /* =========================
-     LOADING
-  ========================= */
 
   if (loading) {
     return (
@@ -189,21 +203,19 @@ function ProductDetails() {
     );
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-
   if (error) {
     return (
-      <main className="product-message error">
+      <main className="product-message">
         <div>
-          <div className="error-icon">!</div>
+          <div className="error-icon">
+            !
+          </div>
 
           <h2>{error}</h2>
 
           <Link
             to="/shop"
-            className="back-to-shop"
+            className="primary-button"
           >
             Back to Shop
           </Link>
@@ -212,19 +224,17 @@ function ProductDetails() {
     );
   }
 
-  /* =========================
-     NOT FOUND
-  ========================= */
-
   if (!product) {
     return (
       <main className="product-message">
         <div>
-          <h2>Product not found.</h2>
+          <h2>
+            Product not found.
+          </h2>
 
           <Link
             to="/shop"
-            className="back-to-shop"
+            className="primary-button"
           >
             Back to Shop
           </Link>
@@ -241,43 +251,44 @@ function ProductDetails() {
   const currentImage =
     images[selectedImage] || "";
 
-  /* =========================
-     PAGE
-  ========================= */
-
   return (
     <main className="product-details-page">
 
       <div className="product-details-container">
 
-        {/* =========================
-            GALLERY
-        ========================= */}
+        {/* GALLERY */}
 
-        <div className="product-gallery">
+        <section className="product-gallery">
 
           <div className="thumbnail-list">
 
             {images.length > 0 ? (
-              images.map((image, index) => (
-                <button
-                  type="button"
-                  key={index}
-                  className={
-                    selectedImage === index
-                      ? "thumbnail active"
-                      : "thumbnail"
-                  }
-                  onClick={() =>
-                    setSelectedImage(index)
-                  }
-                >
-                  <img
-                    src={image}
-                    alt={`${product.name} ${index + 1}`}
-                  />
-                </button>
-              ))
+              images.map(
+                (image, index) => (
+                  <button
+                    type="button"
+                    key={index}
+                    className={
+                      selectedImage ===
+                      index
+                        ? "thumbnail active"
+                        : "thumbnail"
+                    }
+                    onClick={() =>
+                      setSelectedImage(
+                        index
+                      )
+                    }
+                  >
+                    <img
+                      src={image}
+                      alt={`${product.name} ${
+                        index + 1
+                      }`}
+                    />
+                  </button>
+                )
+              )
             ) : (
               <div className="thumbnail-placeholder">
                 💄
@@ -301,30 +312,29 @@ function ProductDetails() {
 
           </div>
 
-        </div>
+        </section>
 
-        {/* =========================
-            PRODUCT INFORMATION
-        ========================= */}
+        {/* INFORMATION */}
 
-        <div className="details-info">
+        <section className="details-info">
 
-          <p className="details-category">
+          <p className="eyebrow">
             {product.category}
           </p>
 
           <h1>{product.name}</h1>
 
           <div className="details-price">
-            Rs. {Number(product.price).toLocaleString()}
+            Rs.{" "}
+            {Number(
+              product.price
+            ).toLocaleString()}
           </div>
 
           <p className="details-description">
             {product.description ||
               "Premium quality beauty product from Blissbix Cosmetics."}
           </p>
-
-          {/* STOCK */}
 
           <div
             className={
@@ -345,6 +355,7 @@ function ProductDetails() {
 
               <div className="option-heading">
                 <h3>Color</h3>
+
                 <span>
                   {selectedColor}
                 </span>
@@ -352,30 +363,35 @@ function ProductDetails() {
 
               <div className="color-options">
 
-                {product.colors.map((color) => (
-                  <button
-                    type="button"
-                    key={color}
-                    className={
-                      selectedColor === color
-                        ? "color-option active"
-                        : "color-option"
-                    }
-                    onClick={() =>
-                      setSelectedColor(color)
-                    }
-                  >
-                    <span
-                      className="color-dot"
-                      style={{
-                        backgroundColor:
-                          color.toLowerCase(),
-                      }}
-                    ></span>
+                {product.colors.map(
+                  (color) => (
+                    <button
+                      type="button"
+                      key={color}
+                      className={
+                        selectedColor ===
+                        color
+                          ? "color-option active"
+                          : "color-option"
+                      }
+                      onClick={() =>
+                        setSelectedColor(
+                          color
+                        )
+                      }
+                    >
+                      <span
+                        className="color-dot"
+                        style={{
+                          backgroundColor:
+                            color.toLowerCase(),
+                        }}
+                      />
 
-                    {color}
-                  </button>
-                ))}
+                      {color}
+                    </button>
+                  )
+                )}
 
               </div>
 
@@ -396,28 +412,34 @@ function ProductDetails() {
                 </h3>
 
                 <span>
-                  {selectedSize || "Select size"}
+                  {selectedSize ||
+                    "Select size"}
                 </span>
               </div>
 
               <div className="options">
 
-                {product.sizes.map((size) => (
-                  <button
-                    type="button"
-                    key={size}
-                    className={
-                      selectedSize === size
-                        ? "option active"
-                        : "option"
-                    }
-                    onClick={() =>
-                      setSelectedSize(size)
-                    }
-                  >
-                    {size}
-                  </button>
-                ))}
+                {product.sizes.map(
+                  (size) => (
+                    <button
+                      type="button"
+                      key={size}
+                      className={
+                        selectedSize ===
+                        size
+                          ? "option active"
+                          : "option"
+                      }
+                      onClick={() =>
+                        setSelectedSize(
+                          size
+                        )
+                      }
+                    >
+                      {size}
+                    </button>
+                  )
+                )}
 
               </div>
 
@@ -440,8 +462,12 @@ function ProductDetails() {
 
               <button
                 type="button"
-                onClick={decreaseQuantity}
-                disabled={quantity <= 1}
+                onClick={
+                  decreaseQuantity
+                }
+                disabled={
+                  quantity <= 1
+                }
               >
                 −
               </button>
@@ -450,10 +476,13 @@ function ProductDetails() {
 
               <button
                 type="button"
-                onClick={increaseQuantity}
+                onClick={
+                  increaseQuantity
+                }
                 disabled={
                   product.stock <= 0 ||
-                  quantity >= product.stock
+                  quantity >=
+                    product.stock
                 }
               >
                 +
@@ -462,8 +491,6 @@ function ProductDetails() {
             </div>
 
           </div>
-
-          {/* MESSAGE */}
 
           {message && (
             <div className="action-message">
@@ -477,9 +504,13 @@ function ProductDetails() {
 
             <button
               type="button"
-              className="add-cart-button"
-              disabled={product.stock <= 0}
-              onClick={handleAddToCart}
+              className="primary-button product-add-button"
+              disabled={
+                product.stock <= 0
+              }
+              onClick={
+                handleAddToCart
+              }
             >
               {product.stock > 0
                 ? "Add to Cart"
@@ -490,10 +521,12 @@ function ProductDetails() {
               type="button"
               className={
                 isWishlisted
-                  ? "wishlist-button active"
-                  : "wishlist-button"
+                  ? "secondary-action wishlist-button active"
+                  : "secondary-action wishlist-button"
               }
-              onClick={handleWishlist}
+              onClick={
+                handleWishlist
+              }
             >
               {isWishlisted
                 ? "♥ In Wishlist"
@@ -502,8 +535,6 @@ function ProductDetails() {
 
           </div>
 
-          {/* VIEW CART */}
-
           <Link
             to="/cart"
             className="view-cart-link"
@@ -511,7 +542,7 @@ function ProductDetails() {
             View Cart →
           </Link>
 
-        </div>
+        </section>
 
       </div>
 

@@ -1,395 +1,1507 @@
+/* =========================================================
+   BLISSBIX COSMETICS
+   MINIMAL EDITORIAL NAVBAR
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
+
+/* =========================================================
+   HEADER
+========================================================= */
+
 .site-header {
+  position: relative;
+  z-index: 1000;
+
+  width: 100%;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e4e7;
+}
+
+
+/* =========================================================
+   MAIN HEADER
+========================================================= */
+
+.header-main {
+  position: relative;
+
+  width: 100%;
+  max-width: 1280px;
+
+  min-height: 82px;
+
+  margin: 0 auto;
+  padding: 0 34px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items: center;
+}
+
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.site-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: #08060d;
+
+  text-decoration: none;
+
+  line-height: 1;
+}
+
+.logo-main {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 25px;
+  font-weight: 600;
+
+  letter-spacing: -0.8px;
+
+  color: #08060d;
+}
+
+.logo-main span {
+  color: #aa3bff;
+}
+
+.logo-sub {
+  margin-top: 6px;
+
+  color: #6b6375;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 7px;
+  font-weight: 600;
+
+  letter-spacing: 3px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.header-search {
   position: relative;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 28px;
+}
 
-  padding: 16px 36px;
+.search-toggle {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #08060d;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.search-toggle:hover {
+  color: #aa3bff;
+}
+
+.search-toggle:focus-visible {
+  outline: 1px solid #aa3bff;
+  outline-offset: 3px;
+}
+
+.search-toggle svg {
+  width: 20px;
+  height: 20px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   DESKTOP SEARCH FORM
+========================================================= */
+
+.search-form {
+  position: absolute;
+
+  left: 42px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+}
+
+.search-form input {
+  width: 190px;
+  height: 38px;
+
+  padding: 0 12px;
+
+  border: 1px solid #e5e4e7;
+
+  border-radius: 0;
 
   background: #ffffff;
 
-  border-bottom: 1px solid #f0dbe3;
+  color: #08060d;
 
-  box-shadow: 0 2px 14px rgba(74, 14, 36, 0.05);
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 
-  z-index: 100;
+  font-size: 13px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Gold line under header */
+.search-form input::placeholder {
+  color: #9a94a1;
+}
 
-.site-header::after {
+.search-form input:focus {
+  border-color: #aa3bff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(170, 59, 255, 0.08);
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 24px;
+}
+
+
+/* =========================================================
+   ACTION LINKS
+========================================================= */
+
+.header-action {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 5px 0;
+
+  color: #08060d;
+
+  text-decoration: none;
+
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+
+  transition: color 0.2s ease;
+}
+
+.header-action:hover {
+  color: #aa3bff;
+}
+
+.header-action:focus-visible {
+  outline: 1px solid #aa3bff;
+  outline-offset: 4px;
+}
+
+.header-action svg {
+  width: 18px;
+  height: 18px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MOBILE SEARCH BUTTON
+========================================================= */
+
+.mobile-search-button {
+  display: none;
+
+  width: 36px;
+  height: 36px;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #08060d;
+
+  cursor: pointer;
+}
+
+.mobile-search-button:hover {
+  color: #aa3bff;
+}
+
+.mobile-search-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.header-navigation {
+  width: 100%;
+
+  border-top: 1px solid #f0eff2;
+}
+
+.navigation-inner {
+  min-height: 48px;
+
+  max-width: 1280px;
+
+  margin: 0 auto;
+  padding: 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 42px;
+}
+
+.navigation-inner a {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  height: 48px;
+
+  color: #6b6375;
+
+  text-decoration: none;
+
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 1.1px;
+
+  text-transform: uppercase;
+
+  transition:
+    color 0.2s ease;
+}
+
+.navigation-inner a:hover {
+  color: #08060d;
+}
+
+.navigation-inner a.active {
+  color: #08060d;
+}
+
+.navigation-inner a::after {
   content: "";
 
   position: absolute;
 
   left: 0;
   right: 0;
-  bottom: -1px;
+  bottom: 0;
 
-  height: 2px;
+  height: 1px;
 
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #c9a15a,
-    transparent
-  );
+  background: #08060d;
 
-  opacity: 0.7;
+  transform: scaleX(0);
+
+  transform-origin: center;
+
+  transition:
+    transform 0.25s ease;
 }
 
-/* =========================
+.navigation-inner a:hover::after,
+.navigation-inner a.active::after {
+  transform: scaleX(1);
+}
+
+.navigation-inner a:focus-visible {
+  outline: none;
+
+  color: #aa3bff;
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+========================================================= */
+
+.mobile-menu-toggle {
+  display: none;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 7px 5px;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+
+  width: 22px;
+  height: 1px;
+
+  margin: 5px auto;
+
+  background: #08060d;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease;
+}
+
+.mobile-menu-toggle.is-open span:nth-child(1) {
+  transform:
+    translateY(6px)
+    rotate(45deg);
+}
+
+.mobile-menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.is-open span:nth-child(3) {
+  transform:
+    translateY(-6px)
+    rotate(-45deg);
+}
+
+
+/* =========================================================
+   MOBILE SEARCH FORM
+========================================================= */
+
+.mobile-search-form {
+  display: none;
+
+  padding: 12px 18px;
+
+  border-top: 1px solid #e5e4e7;
+
+  background: #ffffff;
+}
+
+.mobile-search-inner {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+.mobile-search-inner > svg {
+  position: absolute;
+
+  left: 13px;
+
+  width: 17px;
+  height: 17px;
+
+  color: #6b6375;
+}
+
+.mobile-search-inner input {
+  width: 100%;
+  height: 42px;
+
+  padding:
+    0 40px 0 40px;
+
+  border: 1px solid #e5e4e7;
+
+  border-radius: 0;
+
+  background: #ffffff;
+
+  color: #08060d;
+
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+  font-size: 13px;
+
+  outline: none;
+}
+
+.mobile-search-inner input::placeholder {
+  color: #9a94a1;
+}
+
+.mobile-search-inner input:focus {
+  border-color: #aa3bff;
+}
+
+.search-clear {
+  position: absolute;
+
+  right: 8px;
+
+  width: 30px;
+  height: 30px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #6b6375;
+
+  font-size: 21px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.search-clear:hover {
+  color: #aa3bff;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .header-main {
+    min-height: 76px;
+
+    padding: 0 24px;
+  }
+
+  .header-actions {
+    gap: 17px;
+  }
+
+  .header-action span {
+    display: none;
+  }
+
+  .header-action svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .navigation-inner {
+    gap: 30px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .header-main {
+    min-height: 68px;
+
+    padding: 0 15px;
+
+    grid-template-columns:
+      auto 1fr auto;
+  }
+
+
+  /* MOBILE MENU */
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+
+  /* LEFT DESKTOP SEARCH */
+
+  .header-left {
+    display: none;
+  }
+
+
+  /* LOGO */
+
+  .site-logo {
+    justify-self: center;
+  }
+
+  .logo-main {
+    font-size: 22px;
+  }
+
+  .logo-sub {
+    font-size: 6px;
+
+    letter-spacing: 2.5px;
+  }
+
+
+  /* ACTIONS */
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .mobile-search-button {
+    display: flex;
+  }
+
+  .header-action {
+    padding: 7px;
+  }
+
+  .header-action svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .wishlist-action {
+    display: none;
+  }
+
+
+  /* NAV */
+
+  .header-navigation {
+    display: none;
+
+    border-top: 1px solid #e5e4e7;
+  }
+
+  .header-navigation.mobile-open {
+    display: block;
+  }
+
+  .navigation-inner {
+    min-height: auto;
+
+    padding: 8px 18px 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    justify-content: flex-start;
+
+    gap: 0;
+  }
+
+  .navigation-inner a {
+    height: auto;
+
+    min-height: 46px;
+
+    justify-content: center;
+
+    border-bottom: 1px solid #f0eff2;
+
+    font-size: 11px;
+
+    letter-spacing: 1.2px;
+  }
+
+  .navigation-inner a:last-child {
+    border-bottom: none;
+  }
+
+  .navigation-inner a::after {
+    display: none;
+  }
+
+
+  /* MOBILE SEARCH */
+
+  .mobile-search-form {
+    display: block;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .header-main {
+    padding: 0 10px;
+  }
+
+  .logo-main {
+    font-size: 20px;
+  }
+
+  .header-action {
+    padding: 6px;
+  }
+
+  .header-action svg,
+  .mobile-search-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .site-header *,
+  .site-header *::before,
+  .site-header *::after {
+    transition: none !important;
+  }
+
+}/* =========================================================
+   BLISSBIX COSMETICS
+   MINIMAL EDITORIAL NAVBAR
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+  position: relative;
+  z-index: 1000;
+
+  width: 100%;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e4e7;
+}
+
+
+/* =========================================================
+   MAIN HEADER
+========================================================= */
+
+.header-main {
+  position: relative;
+
+  width: 100%;
+  max-width: 1280px;
+
+  min-height: 82px;
+
+  margin: 0 auto;
+  padding: 0 34px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items: center;
+}
+
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+/* =========================================================
    LOGO
-========================= */
+========================================================= */
 
 .site-logo {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  line-height: 1;
+  color: #08060d;
 
   text-decoration: none;
 
-  flex-shrink: 0;
+  line-height: 1;
 }
 
-.logo-mark {
-  font-family: Georgia, "Times New Roman", serif;
+.logo-main {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 25px;
+  font-weight: 600;
 
-  color: #1c1214;
+  letter-spacing: -0.8px;
 
-  letter-spacing: -0.5px;
+  color: #08060d;
 }
 
-.logo-mark span {
-  color: #c2185b;
+.logo-main span {
+  color: #aa3bff;
 }
 
 .logo-sub {
-  margin-top: 4px;
+  margin-top: 6px;
 
-  font-size: 9px;
+  color: #6b6375;
 
-  font-weight: 700;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-  letter-spacing: 3px;
-
-  color: #c9a15a;
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-.site-nav {
-  display: flex;
-
-  align-items: center;
-
-  gap: 28px;
-
-  list-style: none;
-
-  margin: 0;
-  padding: 0;
-}
-
-.site-nav a {
-  position: relative;
-
-  color: #56454b;
-
-  text-decoration: none;
-
-  font-size: 13px;
-
+  font-size: 7px;
   font-weight: 600;
 
-  letter-spacing: 0.3px;
-
-  padding-bottom: 5px;
-
-  transition: color 0.2s ease;
+  letter-spacing: 3px;
 }
 
-.site-nav a::after {
-  content: "";
 
-  position: absolute;
-
-  left: 0;
-  bottom: 0;
-
-  width: 100%;
-
-  height: 2px;
-
-  background: linear-gradient(
-    90deg,
-    #c2185b,
-    #c9a15a
-  );
-
-  transform: scaleX(0);
-
-  transform-origin: left;
-
-  transition: transform 0.25s ease;
-}
-
-.site-nav a:hover {
-  color: #c2185b;
-}
-
-.site-nav a:hover::after {
-  transform: scaleX(1);
-}
-
-.site-nav a.active {
-  color: #c2185b;
-}
-
-.site-nav a.active::after {
-  transform: scaleX(1);
-}
-
-/* =========================
-   RIGHT SIDE
-========================= */
-
-.header-right {
-  display: flex;
-
-  align-items: center;
-
-  gap: 18px;
-
-  flex-shrink: 0;
-}
-
-/* =========================
+/* =========================================================
    SEARCH
-========================= */
+========================================================= */
 
 .header-search {
   position: relative;
 
   display: flex;
-
   align-items: center;
 }
 
-.header-search input {
-  width: 220px;
+.search-toggle {
+  width: 38px;
+  height: 38px;
 
-  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  padding: 0 48px 0 16px;
+  padding: 0;
 
-  border: 1px solid #eadce2;
+  border: 0;
 
-  border-radius: 25px;
+  background: transparent;
 
-  outline: none;
+  color: #08060d;
 
-  background: #ffffff;
-
-  font-size: 13px;
-
-  color: #1c1214;
+  cursor: pointer;
 
   transition:
-    width 0.3s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
-.header-search input::placeholder {
-  color: #aa9ba0;
+.search-toggle:hover {
+  color: #aa3bff;
 }
 
-.header-search input:focus {
-  width: 250px;
-
-  border-color: #c2185b;
-
-  box-shadow:
-    0 0 0 4px rgba(194, 24, 91, 0.08);
+.search-toggle:focus-visible {
+  outline: 1px solid #aa3bff;
+  outline-offset: 3px;
 }
 
-.header-search button {
+.search-toggle svg {
+  width: 20px;
+  height: 20px;
+
+  display: block;
+}
+
+
+/* =========================================================
+   DESKTOP SEARCH FORM
+========================================================= */
+
+.search-form {
   position: absolute;
 
-  right: 4px;
-
+  left: 42px;
   top: 50%;
 
   transform: translateY(-50%);
 
-  width: 32px;
-
-  height: 32px;
-
   display: flex;
-
   align-items: center;
-
-  justify-content: center;
-
-  border: none;
-
-  border-radius: 50%;
-
-  cursor: pointer;
-
-  background: linear-gradient(
-    135deg,
-    #4a0e24,
-    #c2185b
-  );
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
-.header-search button:hover {
-  transform: translateY(-50%) scale(1.06);
+.search-form input {
+  width: 190px;
+  height: 38px;
 
-  box-shadow:
-    0 5px 15px rgba(194, 24, 91, 0.3);
-}
+  padding: 0 12px;
 
-.header-search button svg {
-  width: 14px;
+  border: 1px solid #e5e4e7;
 
-  height: 14px;
+  border-radius: 0;
 
-  color: #ffffff;
-}
+  background: #ffffff;
 
-/* =========================
-   LOGIN
-========================= */
+  color: #08060d;
 
-.login-link {
-  color: #1c1214;
-
-  text-decoration: none;
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 
   font-size: 13px;
 
-  font-weight: 700;
-
-  padding: 9px 18px;
-
-  border: 1px solid #1c1214;
-
-  border-radius: 25px;
+  outline: none;
 
   transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.login-link:hover {
-  background: linear-gradient(
-    120deg,
-    #4a0e24,
-    #c2185b
-  );
-
-  border-color: transparent;
-
-  color: #ffffff;
-
-  transform: translateY(-1px);
+.search-form input::placeholder {
+  color: #9a94a1;
 }
 
-/* =========================
+.search-form input:focus {
+  border-color: #aa3bff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(170, 59, 255, 0.08);
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 24px;
+}
+
+
+/* =========================================================
+   ACTION LINKS
+========================================================= */
+
+.header-action {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 5px 0;
+
+  color: #08060d;
+
+  text-decoration: none;
+
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+
+  transition: color 0.2s ease;
+}
+
+.header-action:hover {
+  color: #aa3bff;
+}
+
+.header-action:focus-visible {
+  outline: 1px solid #aa3bff;
+  outline-offset: 4px;
+}
+
+.header-action svg {
+  width: 18px;
+  height: 18px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MOBILE SEARCH BUTTON
+========================================================= */
+
+.mobile-search-button {
+  display: none;
+
+  width: 36px;
+  height: 36px;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #08060d;
+
+  cursor: pointer;
+}
+
+.mobile-search-button:hover {
+  color: #aa3bff;
+}
+
+.mobile-search-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.header-navigation {
+  width: 100%;
+
+  border-top: 1px solid #f0eff2;
+}
+
+.navigation-inner {
+  min-height: 48px;
+
+  max-width: 1280px;
+
+  margin: 0 auto;
+  padding: 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 42px;
+}
+
+.navigation-inner a {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  height: 48px;
+
+  color: #6b6375;
+
+  text-decoration: none;
+
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 1.1px;
+
+  text-transform: uppercase;
+
+  transition:
+    color 0.2s ease;
+}
+
+.navigation-inner a:hover {
+  color: #08060d;
+}
+
+.navigation-inner a.active {
+  color: #08060d;
+}
+
+.navigation-inner a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 1px;
+
+  background: #08060d;
+
+  transform: scaleX(0);
+
+  transform-origin: center;
+
+  transition:
+    transform 0.25s ease;
+}
+
+.navigation-inner a:hover::after,
+.navigation-inner a.active::after {
+  transform: scaleX(1);
+}
+
+.navigation-inner a:focus-visible {
+  outline: none;
+
+  color: #aa3bff;
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+========================================================= */
+
+.mobile-menu-toggle {
+  display: none;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 7px 5px;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+
+  width: 22px;
+  height: 1px;
+
+  margin: 5px auto;
+
+  background: #08060d;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease;
+}
+
+.mobile-menu-toggle.is-open span:nth-child(1) {
+  transform:
+    translateY(6px)
+    rotate(45deg);
+}
+
+.mobile-menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.is-open span:nth-child(3) {
+  transform:
+    translateY(-6px)
+    rotate(-45deg);
+}
+
+
+/* =========================================================
+   MOBILE SEARCH FORM
+========================================================= */
+
+.mobile-search-form {
+  display: none;
+
+  padding: 12px 18px;
+
+  border-top: 1px solid #e5e4e7;
+
+  background: #ffffff;
+}
+
+.mobile-search-inner {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+.mobile-search-inner > svg {
+  position: absolute;
+
+  left: 13px;
+
+  width: 17px;
+  height: 17px;
+
+  color: #6b6375;
+}
+
+.mobile-search-inner input {
+  width: 100%;
+  height: 42px;
+
+  padding:
+    0 40px 0 40px;
+
+  border: 1px solid #e5e4e7;
+
+  border-radius: 0;
+
+  background: #ffffff;
+
+  color: #08060d;
+
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+
+  font-size: 13px;
+
+  outline: none;
+}
+
+.mobile-search-inner input::placeholder {
+  color: #9a94a1;
+}
+
+.mobile-search-inner input:focus {
+  border-color: #aa3bff;
+}
+
+.search-clear {
+  position: absolute;
+
+  right: 8px;
+
+  width: 30px;
+  height: 30px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #6b6375;
+
+  font-size: 21px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.search-clear:hover {
+  color: #aa3bff;
+}
+
+
+/* =========================================================
    TABLET
-========================= */
+========================================================= */
 
-@media (max-width: 1000px) {
-  .site-header {
-    gap: 18px;
+@media (max-width: 900px) {
 
-    padding: 15px 24px;
+  .header-main {
+    min-height: 76px;
+
+    padding: 0 24px;
   }
 
-  .site-nav {
-    gap: 18px;
+  .header-actions {
+    gap: 17px;
   }
 
-  .header-search input {
-    width: 180px;
-  }
-
-  .header-search input:focus {
-    width: 200px;
-  }
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 750px) {
-  .site-header {
-    flex-wrap: wrap;
-  }
-
-  .site-nav {
-    order: 3;
-
-    width: 100%;
-
-    justify-content: center;
-
-    padding-top: 12px;
-
-    border-top: 1px solid #f4e4e9;
-  }
-
-  .header-right {
-    margin-left: auto;
-  }
-}
-
-@media (max-width: 520px) {
-  .site-header {
-    padding: 14px 16px;
-  }
-
-  .header-search {
+  .header-action span {
     display: none;
   }
 
-  .site-nav {
-    gap: 16px;
+  .header-action svg {
+    width: 20px;
+    height: 20px;
   }
 
-  .site-nav a {
+  .navigation-inner {
+    gap: 30px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .header-main {
+    min-height: 68px;
+
+    padding: 0 15px;
+
+    grid-template-columns:
+      auto 1fr auto;
+  }
+
+
+  /* MOBILE MENU */
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+
+  /* LEFT DESKTOP SEARCH */
+
+  .header-left {
+    display: none;
+  }
+
+
+  /* LOGO */
+
+  .site-logo {
+    justify-self: center;
+  }
+
+  .logo-main {
+    font-size: 22px;
+  }
+
+  .logo-sub {
+    font-size: 6px;
+
+    letter-spacing: 2.5px;
+  }
+
+
+  /* ACTIONS */
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .mobile-search-button {
+    display: flex;
+  }
+
+  .header-action {
+    padding: 7px;
+  }
+
+  .header-action svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .wishlist-action {
+    display: none;
+  }
+
+
+  /* NAV */
+
+  .header-navigation {
+    display: none;
+
+    border-top: 1px solid #e5e4e7;
+  }
+
+  .header-navigation.mobile-open {
+    display: block;
+  }
+
+  .navigation-inner {
+    min-height: auto;
+
+    padding: 8px 18px 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    justify-content: flex-start;
+
+    gap: 0;
+  }
+
+  .navigation-inner a {
+    height: auto;
+
+    min-height: 46px;
+
+    justify-content: center;
+
+    border-bottom: 1px solid #f0eff2;
+
     font-size: 11px;
+
+    letter-spacing: 1.2px;
   }
 
-  .logo-mark {
-    font-size: 23px;
+  .navigation-inner a:last-child {
+    border-bottom: none;
   }
 
-  .login-link {
-    padding: 8px 14px;
-
-    font-size: 11px;
+  .navigation-inner a::after {
+    display: none;
   }
+
+
+  /* MOBILE SEARCH */
+
+  .mobile-search-form {
+    display: block;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .header-main {
+    padding: 0 10px;
+  }
+
+  .logo-main {
+    font-size: 20px;
+  }
+
+  .header-action {
+    padding: 6px;
+  }
+
+  .header-action svg,
+  .mobile-search-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .site-header *,
+  .site-header *::before,
+  .site-header *::after {
+    transition: none !important;
+  }
+
 }

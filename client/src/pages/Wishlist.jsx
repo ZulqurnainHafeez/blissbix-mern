@@ -5,9 +5,9 @@ import "./Wishlist.css";
 function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
 
-  /* =========================
+  /* =========================================================
      LOAD WISHLIST
-  ========================= */
+  ========================================================= */
 
   useEffect(() => {
     loadWishlist();
@@ -31,9 +31,9 @@ function Wishlist() {
     }
   };
 
-  /* =========================
+  /* =========================================================
      REMOVE ITEM
-  ========================= */
+  ========================================================= */
 
   const removeFromWishlist = (productId) => {
     const updatedWishlist = wishlist.filter(
@@ -48,9 +48,9 @@ function Wishlist() {
     );
   };
 
-  /* =========================
+  /* =========================================================
      CLEAR WISHLIST
-  ========================= */
+  ========================================================= */
 
   const clearWishlist = () => {
     setWishlist([]);
@@ -60,110 +60,177 @@ function Wishlist() {
     );
   };
 
-  /* =========================
-     EMPTY
-  ========================= */
+  /* =========================================================
+     EMPTY WISHLIST
+  ========================================================= */
 
   if (wishlist.length === 0) {
     return (
       <main className="wishlist-page">
 
-        <div className="wishlist-empty">
+        <section className="wishlist-empty">
 
           <div className="wishlist-empty-icon">
             ♡
           </div>
 
-          <p className="wishlist-label">
-            BLISSBIX COSMETICS
-          </p>
+          <div className="wishlist-empty-content">
 
-          <h1>Your Wishlist</h1>
-
-          <p className="wishlist-empty-text">
-            Your wishlist is currently empty.
-          </p>
-
-          <Link
-            to="/shop"
-            className="wishlist-shop-button"
-          >
-            Explore Products
-          </Link>
-
-        </div>
-
-      </main>
-    );
-  }
-
-  /* =========================
-     WISHLIST PAGE
-  ========================= */
-
-  return (
-    <main className="wishlist-page">
-
-      <div className="wishlist-container">
-
-        <div className="wishlist-header">
-
-          <div>
             <p className="wishlist-label">
               BLISSBIX COSMETICS
             </p>
 
             <h1>Your Wishlist</h1>
 
-            <span>
-              {wishlist.length}{" "}
-              {wishlist.length === 1
-                ? "product"
-                : "products"}{" "}
-              saved
-            </span>
+            <p className="wishlist-empty-text">
+              Your wishlist is currently empty.
+            </p>
+
+            <Link
+              to="/shop"
+              className="wishlist-shop-button"
+            >
+              Explore Products
+            </Link>
+
           </div>
 
-          <button
-            type="button"
-            className="clear-wishlist"
-            onClick={clearWishlist}
-          >
-            Clear Wishlist
-          </button>
+        </section>
+
+      </main>
+    );
+  }
+
+  /* =========================================================
+     WISHLIST PAGE
+  ========================================================= */
+
+  return (
+    <main className="wishlist-page">
+
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
+      <section className="wishlist-header">
+
+        <div>
+
+          <div className="wishlist-breadcrumb">
+            <span>Home</span>
+            <span>/</span>
+            <span>Wishlist</span>
+          </div>
+
+          <h1 className="wishlist-title">
+            Your Wishlist
+          </h1>
+
+          <p className="wishlist-subtitle">
+            {wishlist.length}{" "}
+            {wishlist.length === 1
+              ? "product"
+              : "products"}{" "}
+            saved
+          </p>
 
         </div>
+
+        <button
+          type="button"
+          className="clear-wishlist"
+          onClick={clearWishlist}
+        >
+          Clear Wishlist
+        </button>
+
+      </section>
+
+
+      {/* =====================================================
+          WISHLIST CONTENT
+      ===================================================== */}
+
+      <section className="wishlist-content">
+
+        {/* ===================================================
+            RESULT COUNT
+        =================================================== */}
+
+        <div className="wishlist-results-header">
+
+          <span className="wishlist-result-count">
+            Showing {wishlist.length}{" "}
+            {wishlist.length === 1
+              ? "product"
+              : "products"}
+          </span>
+
+        </div>
+
+
+        {/* ===================================================
+            PRODUCTS
+        =================================================== */}
 
         <div className="wishlist-grid">
 
           {wishlist.map((item) => (
-            <div
+
+            <article
               className="wishlist-card"
               key={item.productId}
             >
 
-              {/* IMAGE */}
+              {/* =================================================
+                  PRODUCT IMAGE
+              ================================================= */}
 
-              <Link
-                to={`/product/${item.productId}`}
-                className="wishlist-image"
-              >
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                  />
-                ) : (
-                  <span>💄</span>
-                )}
-              </Link>
+              <div className="wishlist-image">
 
-              {/* INFO */}
+                <Link
+                  to={`/product/${item.productId}`}
+                  className="wishlist-image-link"
+                >
+
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                    />
+                  ) : (
+                    <span className="wishlist-image-placeholder">
+                      ♡
+                    </span>
+                  )}
+
+                </Link>
+
+                {/* REMOVE */}
+                <button
+                  type="button"
+                  className="wishlist-remove-icon"
+                  aria-label={`Remove ${item.name} from wishlist`}
+                  onClick={() =>
+                    removeFromWishlist(
+                      item.productId
+                    )
+                  }
+                >
+                  ×
+                </button>
+
+              </div>
+
+
+              {/* =================================================
+                  PRODUCT INFORMATION
+              ================================================= */}
 
               <div className="wishlist-info">
 
                 <p className="wishlist-category">
-                  {item.category}
+                  {item.category || "Beauty"}
                 </p>
 
                 <Link
@@ -173,12 +240,17 @@ function Wishlist() {
                   {item.name}
                 </Link>
 
-                <strong className="wishlist-price">
+                <p className="wishlist-price">
                   Rs.{" "}
                   {Number(
                     item.price
                   ).toLocaleString()}
-                </strong>
+                </p>
+
+
+                {/* =================================================
+                    ACTIONS
+                ================================================= */}
 
                 <div className="wishlist-actions">
 
@@ -205,12 +277,26 @@ function Wishlist() {
 
               </div>
 
-            </div>
+            </article>
+
           ))}
 
         </div>
 
-      </div>
+      </section>
+
+
+      {/* =====================================================
+          SUBSCRIBE
+      ===================================================== */}
+
+      <section className="wishlist-subscribe">
+
+        <h2>
+          Subscribe to get 10% Off
+        </h2>
+
+      </section>
 
     </main>
   );
