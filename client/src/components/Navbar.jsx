@@ -1,19 +1,63 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
+  const navigate = useNavigate();
+
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
 
+  // Logged-in user
+  const [user, setUser] = useState(null);
+
   const inputRef = useRef(null);
+
+  // =====================================================
+  // CHECK LOGIN USER
+  // =====================================================
+
+  useEffect(() => {
+    const checkUser = () => {
+      const savedUser = localStorage.getItem("user");
+
+      if (savedUser) {
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (error) {
+          console.error("Invalid saved user:", error);
+          localStorage.removeItem("user");
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+
+    // Update navbar when login/logout happens
+    window.addEventListener("storage", checkUser);
+
+    return () => {
+      window.removeEventListener("storage", checkUser);
+    };
+  }, []);
+
+  // =====================================================
+  // SEARCH FOCUS
+  // =====================================================
 
   useEffect(() => {
     if (searchOpen) {
       inputRef.current?.focus();
     }
   }, [searchOpen]);
+
+  // =====================================================
+  // SEARCH
+  // =====================================================
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
@@ -22,14 +66,54 @@ function Navbar() {
 
     if (!value) return;
 
-    window.location.href = `/shop?search=${encodeURIComponent(value)}`;
+    window.location.href =
+      `/shop?search=${encodeURIComponent(value)}`;
+
     setSearchOpen(false);
     setMobileMenuOpen(false);
   };
 
+  // =====================================================
+  // MOBILE MENU
+  // =====================================================
+
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
+
+  // =====================================================
+  // ACCOUNT
+  // =====================================================
+
+  const handleAccountClick = () => {
+    setMobileMenuOpen(false);
+    setSearchOpen(false);
+
+    if (user) {
+      navigate("/account");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    setUser(null);
+
+    setMobileMenuOpen(false);
+
+    navigate("/login");
+  };
+
+  // =====================================================
+  // RETURN
+  // =====================================================
 
   return (
     <header className="site-header">
@@ -94,6 +178,7 @@ function Navbar() {
                 aria-hidden="true"
               >
                 <circle cx="11" cy="11" r="7" />
+
                 <line
                   x1="16.5"
                   y1="16.5"
@@ -136,7 +221,6 @@ function Navbar() {
           className="site-logo"
           onClick={closeMobileMenu}
         >
-
           <span className="logo-main">
             Bliss<span>bix</span>
           </span>
@@ -144,7 +228,6 @@ function Navbar() {
           <span className="logo-sub">
             COSMETICS
           </span>
-
         </Link>
 
 
@@ -154,7 +237,7 @@ function Navbar() {
 
         <div className="header-actions">
 
-          {/* SEARCH MOBILE */}
+          {/* MOBILE SEARCH */}
 
           <button
             type="button"
@@ -174,6 +257,7 @@ function Navbar() {
               aria-hidden="true"
             >
               <circle cx="11" cy="11" r="7" />
+
               <line
                 x1="16.5"
                 y1="16.5"
@@ -184,12 +268,15 @@ function Navbar() {
           </button>
 
 
-          {/* ACCOUNT */}
+          {/* =================================================
+              ACCOUNT
+          ================================================= */}
 
-          <Link
-            to="/login"
-            className="header-action"
+          <button
+            type="button"
+            className="header-action account-button"
             aria-label="Account"
+            onClick={handleAccountClick}
           >
             <svg
               viewBox="0 0 24 24"
@@ -200,15 +287,26 @@ function Navbar() {
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7" />
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+              />
+
+              <path
+                d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"
+              />
             </svg>
 
-            <span>Account</span>
-          </Link>
+            <span>
+              {user?.name || "Account"}
+            </span>
+          </button>
 
 
-          {/* WISHLIST */}
+          {/* =================================================
+              WISHLIST
+          ================================================= */}
 
           <Link
             to="/wishlist"
@@ -224,14 +322,20 @@ function Navbar() {
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <path d="M20.8 8.7c0 5.5-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z" />
+              <path
+                d="M20.8 8.7c0 5.5-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z"
+              />
             </svg>
 
-            <span>Wishlist</span>
+            <span>
+              Wishlist
+            </span>
           </Link>
 
 
-          {/* CART */}
+          {/* =================================================
+              CART
+          ================================================= */}
 
           <Link
             to="/cart"
@@ -247,11 +351,18 @@ function Navbar() {
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <path d="M6 8h12l1 12H5L6 8Z" />
-              <path d="M9 8a3 3 0 0 1 6 0" />
+              <path
+                d="M6 8h12l1 12H5L6 8Z"
+              />
+
+              <path
+                d="M9 8a3 3 0 0 1 6 0"
+              />
             </svg>
 
-            <span>Cart</span>
+            <span>
+              Cart
+            </span>
           </Link>
 
         </div>
@@ -326,7 +437,12 @@ function Navbar() {
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <circle cx="11" cy="11" r="7" />
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+              />
+
               <line
                 x1="16.5"
                 y1="16.5"
@@ -334,6 +450,7 @@ function Navbar() {
                 y2="21"
               />
             </svg>
+
 
             <input
               ref={inputRef}
@@ -345,6 +462,7 @@ function Navbar() {
                 setSearch(event.target.value)
               }
             />
+
 
             {search && (
               <button

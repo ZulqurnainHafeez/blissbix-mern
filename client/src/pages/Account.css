@@ -1,0 +1,297 @@
+/* =========================================================
+   BLISSBIX COSMETICS
+   ACCOUNT PAGE
+========================================================= */
+
+.account-page {
+  width: 100%;
+  min-height: calc(100vh - 160px);
+
+  padding: 60px 20px 80px;
+
+  background: #ffffff;
+
+  color: #222222;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.account-container {
+  width: min(850px, 100%);
+
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.account-header {
+  text-align: center;
+
+  margin-bottom: 40px;
+}
+
+.account-header > span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #777777;
+
+  font-size: 8px;
+
+  font-weight: 500;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+}
+
+.account-header h1 {
+  margin: 0;
+
+  color: #151515;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 34px;
+
+  font-weight: 400;
+
+  line-height: 1.2;
+}
+
+.account-header p {
+  margin: 10px 0 0;
+
+  color: #777777;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACCOUNT INFO
+========================================================= */
+
+.account-info {
+  width: 100%;
+
+  border-top: 1px solid #dddddd;
+
+  border-bottom: 1px solid #dddddd;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   ACCOUNT ROW
+========================================================= */
+
+.account-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  min-height: 70px;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.account-row:last-child {
+  border-bottom: none;
+}
+
+.account-row span {
+  color: #777777;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+.account-row strong {
+  max-width: 60%;
+
+  color: #222222;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  text-align: right;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   LOGOUT BUTTON
+========================================================= */
+
+.logout-button {
+  display: block;
+
+  width: 180px;
+
+  height: 40px;
+
+  margin: 30px auto 0;
+
+  padding: 0;
+
+  border: 1px solid #222222;
+
+  border-radius: 0;
+
+  background: #222222;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.logout-button:hover {
+  background: #ffffff;
+
+  color: #222222;
+}
+
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.account-container > h1 {
+  color: #222222;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 28px;
+
+  font-weight: 400;
+
+  text-align: center;
+}
+
+.account-container > p {
+  color: #777777;
+
+  font-size: 11px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .account-page {
+    min-height: calc(100vh - 120px);
+
+    padding: 40px 15px 60px;
+  }
+
+  .account-header {
+    margin-bottom: 30px;
+  }
+
+  .account-header h1 {
+    font-size: 28px;
+  }
+
+  .account-header p {
+    font-size: 10px;
+  }
+
+  .account-row {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-height: auto;
+
+    padding: 16px;
+  }
+
+  .account-row strong {
+    max-width: 100%;
+
+    text-align: left;
+
+    font-size: 11px;
+  }
+
+  .logout-button {
+    width: 100%;
+
+    height: 40px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .account-page {
+    padding-left: 12px;
+
+    padding-right: 12px;
+  }
+
+  .account-header h1 {
+    font-size: 25px;
+  }
+
+  .account-row {
+    padding: 14px;
+  }
+
+}

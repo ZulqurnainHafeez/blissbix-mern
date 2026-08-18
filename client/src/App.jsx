@@ -10,6 +10,7 @@ import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Account from "./pages/Account";
 
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
@@ -19,28 +20,63 @@ function App() {
     <BrowserRouter>
       <CartProvider>
         <WishlistProvider>
+
           <Navbar />
 
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
+
+            {/* HOME */}
+            <Route
+              path="/"
+              element={<Home />}
+            />
+
+            {/* SHOP */}
+            <Route
+              path="/shop"
+              element={<Shop />}
+            />
+
+            {/* PRODUCT DETAILS */}
             <Route
               path="/product/:id"
               element={<ProductDetails />}
             />
-            <Route path="/cart" element={<Cart />} />
+
+            {/* CART */}
+            <Route
+              path="/cart"
+              element={<Cart />}
+            />
+
+            {/* WISHLIST */}
             <Route
               path="/wishlist"
               element={<Wishlist />}
             />
-            <Route path="/login" element={<Login />} />
+
+            {/* LOGIN */}
+            <Route
+              path="/login"
+              element={<Login />}
+            />
+
+            {/* REGISTER */}
             <Route
               path="/register"
               element={<Register />}
             />
+
+            {/* ACCOUNT */}
+            <Route
+              path="/account"
+              element={<Account />}
+            />
+
           </Routes>
 
           <Footer />
+
         </WishlistProvider>
       </CartProvider>
     </BrowserRouter>

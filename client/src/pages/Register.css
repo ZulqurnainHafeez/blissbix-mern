@@ -1,0 +1,297 @@
+/* =========================================================
+   BLISSBIX REGISTER PAGE
+========================================================= */
+
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  background: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* =========================================================
+   REGISTER CARD
+========================================================= */
+
+.register-card {
+  width: 100%;
+  max-width: 430px;
+
+  padding: 42px 40px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.register-header {
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+.register-header span {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #777777;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  letter-spacing: 2.5px;
+
+  text-transform: uppercase;
+}
+
+.register-header h1 {
+  margin: 0;
+
+  color: #222222;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.register-header p {
+  margin: 9px 0 0;
+
+  color: #777777;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.register-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 17px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.form-group label {
+  color: #444444;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  letter-spacing: 0.7px;
+
+  text-transform: uppercase;
+}
+
+.form-group input {
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 2px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #333333;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  transition: all 0.25s ease;
+}
+
+.form-group input::placeholder {
+  color: #aaaaaa;
+}
+
+.form-group input:hover {
+  border-color: #999999;
+}
+
+.form-group input:focus {
+  border-color: #222222;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.register-error {
+  padding: 10px 12px;
+
+  border: 1px solid #efcaca;
+
+  background: #fff6f6;
+
+  color: #a33a3a;
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+.register-success {
+  padding: 10px 12px;
+
+  border: 1px solid #c9e5d1;
+
+  background: #f5fff7;
+
+  color: #347447;
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   REGISTER BUTTON
+========================================================= */
+
+.register-button {
+  width: 100%;
+
+  height: 43px;
+
+  margin-top: 3px;
+
+  border: 1px solid #222222;
+
+  border-radius: 0;
+
+  background: #222222;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.register-button:hover {
+  background: #ffffff;
+
+  color: #222222;
+}
+
+.register-button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.register-footer {
+  margin-top: 24px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #eeeeee;
+
+  text-align: center;
+}
+
+.register-footer p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 10px;
+}
+
+.register-footer a {
+  color: #222222;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .register-page {
+    padding: 25px 15px;
+  }
+
+  .register-card {
+    padding: 32px 24px;
+  }
+
+  .register-header h1 {
+    font-size: 27px;
+  }
+}

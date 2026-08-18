@@ -1,0 +1,307 @@
+/* =========================================================
+   BLISSBIX COSMETICS
+   LOGIN PAGE
+========================================================= */
+
+.auth-page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  background: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* =========================================================
+   LOGIN CONTAINER
+========================================================= */
+
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+
+  padding: 42px 38px;
+
+  background: #ffffff;
+
+  border: 1px solid #eeeeee;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.auth-container h1 {
+  margin: 0 0 8px;
+
+  color: #161616;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 32px;
+
+  font-weight: 400;
+
+  line-height: 1.2;
+
+  text-align: center;
+}
+
+.auth-container > p {
+  margin: 0 0 30px;
+
+  color: #777777;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.auth-form {
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #444444;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.8px;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.form-group input {
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #d5d5d5;
+
+  border-radius: 2px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #333333;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  transition: all 0.25s ease;
+}
+
+.form-group input::placeholder {
+  color: #aaaaaa;
+}
+
+.form-group input:hover {
+  border-color: #999999;
+}
+
+.form-group input:focus {
+  border-color: #222222;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.03);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+.auth-form button {
+  width: 100%;
+
+  height: 42px;
+
+  margin-top: 5px;
+
+  border: 1px solid #222222;
+
+  border-radius: 0;
+
+  background: #222222;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.auth-form button:hover {
+  background: #ffffff;
+
+  color: #222222;
+}
+
+.auth-form button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+.auth-success {
+  margin: 12px 0;
+
+  padding: 10px;
+
+  border: 1px solid #d8eadc;
+
+  background: #f5fbf6;
+
+  color: #28733b;
+
+  font-size: 10px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.auth-error {
+  margin: 12px 0;
+
+  padding: 10px;
+
+  border: 1px solid #f0d2d2;
+
+  background: #fff7f7;
+
+  color: #a33a3a;
+
+  font-size: 10px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.auth-footer {
+  margin-top: 25px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #eeeeee;
+
+  text-align: center;
+}
+
+.auth-footer p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 10px;
+}
+
+.auth-footer a {
+  color: #222222;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+  .auth-page {
+    padding: 25px 15px;
+  }
+
+  .auth-container {
+    padding: 32px 24px;
+  }
+
+  .auth-container h1 {
+    font-size: 28px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 350px) {
+  .auth-container {
+    padding: 28px 18px;
+  }
+
+  .auth-container h1 {
+    font-size: 25px;
+  }
+}

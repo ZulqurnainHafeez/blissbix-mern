@@ -1,13 +1,133 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../api/api";
 import "./Home.css";
 
 function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  /* =========================================================
+     FETCH PRODUCTS
+  ========================================================= */
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get("/products");
+
+        setProducts(response.data.products || []);
+      } catch (error) {
+        console.error("Home products error:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  /* =========================================================
+     PRODUCT IMAGE HELPER
+  ========================================================= */
+
+  const getProductImage = (product) => {
+    if (!product) return "";
+
+    return (
+      product.image ||
+      product.images?.[0] ||
+      product.imageUrl ||
+      ""
+    );
+  };
+
+  /* =========================================================
+     CATEGORY DATA
+  ========================================================= */
+
+  const categories = [
+    {
+      name: "Makeup",
+      description: "Express your beauty",
+      slug: "Makeup",
+    },
+    {
+      name: "Skincare",
+      description: "Care for your skin",
+      slug: "Skincare",
+    },
+    {
+      name: "Fragrance",
+      description: "Find your signature scent",
+      slug: "Fragrance",
+    },
+    {
+      name: "Nails",
+      description: "Complete your look",
+      slug: "Nails",
+    },
+  ];
+
+  /* =========================================================
+     CATEGORY IMAGES
+  ========================================================= */
+
+  const categoryProducts = useMemo(() => {
+    return categories.map((category) => {
+      const product = products.find(
+        (item) =>
+          item.category?.toLowerCase() ===
+          category.name.toLowerCase()
+      );
+
+      return {
+        ...category,
+        image: getProductImage(product),
+      };
+    });
+  }, [products]);
+
+  /* =========================================================
+     FEATURED PRODUCTS
+  ========================================================= */
+
+  const featuredProducts = useMemo(() => {
+    return products.slice(0, 4);
+  }, [products]);
+
+  /* =========================================================
+     LOADING
+  ========================================================= */
+
+  if (loading) {
+    return (
+      <main className="home-page">
+        <div className="home-loading">
+          <span className="home-loading-line"></span>
+
+          <p>BLISSBIX COSMETICS</p>
+
+          <h2>Loading collection</h2>
+
+          <span>Please wait...</span>
+        </div>
+      </main>
+    );
+  }
+
+  /* =========================================================
+     HOME
+  ========================================================= */
+
   return (
     <main className="home-page">
 
-      {/* =========================
+      {/* =====================================================
           HERO
-      ========================= */}
+      ===================================================== */}
+
       <section className="home-hero">
 
         <div className="home-hero-content">
@@ -42,19 +162,37 @@ function Home() {
 
         </div>
 
+
+        {/* HERO IMAGE */}
+
         <div className="home-hero-visual">
+
           <div className="home-hero-image">
-            <span>Beauty</span>
+
+            {products[0] &&
+            getProductImage(products[0]) ? (
+              <img
+                src={getProductImage(products[0])}
+                alt={products[0].name || "Beauty product"}
+              />
+            ) : (
+              <div className="home-image-empty">
+                <span>BEAUTY</span>
+              </div>
+            )}
+
           </div>
+
         </div>
 
       </section>
 
 
-      {/* =========================
+      {/* =====================================================
           CATEGORY
-      ========================= */}
-      <section className="home-section">
+      ===================================================== */}
+
+      <section className="home-section home-category-section">
 
         <div className="home-section-header">
 
@@ -66,86 +204,77 @@ function Home() {
 
         </div>
 
+
         <div className="home-category-grid">
 
-          <Link
-            to="/shop?category=Makeup"
-            className="home-category-card"
-          >
-            <div className="home-category-image">
-              <span>Makeup</span>
-            </div>
+          {categoryProducts.map((category) => (
 
-            <div className="home-category-info">
-              <h3>Makeup</h3>
-              <p>Express your beauty</p>
-            </div>
-          </Link>
+            <Link
+              key={category.name}
+              to={`/shop?category=${category.slug}`}
+              className="home-category-card"
+            >
 
+              <div className="home-category-image">
 
-          <Link
-            to="/shop?category=Skincare"
-            className="home-category-card"
-          >
-            <div className="home-category-image">
-              <span>Skincare</span>
-            </div>
+                {category.image ? (
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="home-image-empty">
+                    <span>
+                      {category.name.toUpperCase()}
+                    </span>
+                  </div>
+                )}
 
-            <div className="home-category-info">
-              <h3>Skincare</h3>
-              <p>Care for your skin</p>
-            </div>
-          </Link>
+              </div>
 
 
-          <Link
-            to="/shop?category=Fragrance"
-            className="home-category-card"
-          >
-            <div className="home-category-image">
-              <span>Fragrance</span>
-            </div>
+              <div className="home-category-info">
 
-            <div className="home-category-info">
-              <h3>Fragrance</h3>
-              <p>Find your signature scent</p>
-            </div>
-          </Link>
+                <h3>
+                  {category.name}
+                </h3>
 
+                <p>
+                  {category.description}
+                </p>
 
-          <Link
-            to="/shop?category=Nails"
-            className="home-category-card"
-          >
-            <div className="home-category-image">
-              <span>Nails</span>
-            </div>
+              </div>
 
-            <div className="home-category-info">
-              <h3>Nails</h3>
-              <p>Complete your look</p>
-            </div>
-          </Link>
+            </Link>
+
+          ))}
 
         </div>
 
       </section>
 
 
-      {/* =========================
-          FEATURED
-      ========================= */}
+      {/* =====================================================
+          FEATURED PRODUCTS
+      ===================================================== */}
+
       <section className="home-section home-featured">
 
         <div className="home-section-header home-featured-header">
 
           <div>
-            <p>OUR COLLECTION</p>
+
+            <p>
+              OUR COLLECTION
+            </p>
 
             <h2>
               Beauty Essentials
             </h2>
+
           </div>
+
 
           <Link
             to="/shop"
@@ -157,131 +286,129 @@ function Home() {
         </div>
 
 
-        <div className="home-product-grid">
+        {featuredProducts.length > 0 ? (
 
-          <article className="home-product-card">
+          <div className="home-product-grid">
 
-            <div className="home-product-image">
-              <span>01</span>
-            </div>
+            {featuredProducts.map((product, index) => {
 
-            <div className="home-product-info">
+              const productImage =
+                getProductImage(product);
 
-              <p className="home-product-category">
-                Makeup
-              </p>
+              const productName =
+                product.name ||
+                product.title ||
+                "Beauty Product";
 
-              <h3>
-                Matte Lipstick
-              </h3>
+              const productPrice =
+                product.price ?? 0;
 
-              <p>
-                Beautiful long-lasting color.
-              </p>
+              return (
 
-              <Link to="/shop">
-                View Product
-              </Link>
+                <article
+                  className="home-product-card"
+                  key={product._id}
+                >
 
-            </div>
+                  {/* PRODUCT IMAGE */}
 
-          </article>
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="home-product-image"
+                  >
 
+                    {productImage ? (
 
-          <article className="home-product-card">
+                      <img
+                        src={productImage}
+                        alt={productName}
+                        loading="lazy"
+                      />
 
-            <div className="home-product-image">
-              <span>02</span>
-            </div>
+                    ) : (
 
-            <div className="home-product-info">
+                      <div className="home-image-empty">
+                        <span>
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                      </div>
 
-              <p className="home-product-category">
-                Skincare
-              </p>
+                    )}
 
-              <h3>
-                Vitamin C Face Serum
-              </h3>
-
-              <p>
-                For a brighter natural glow.
-              </p>
-
-              <Link to="/shop">
-                View Product
-              </Link>
-
-            </div>
-
-          </article>
+                  </Link>
 
 
-          <article className="home-product-card">
+                  {/* PRODUCT INFO */}
 
-            <div className="home-product-image">
-              <span>03</span>
-            </div>
+                  <div className="home-product-info">
 
-            <div className="home-product-info">
+                    <p className="home-product-category">
+                      {product.category || "BEAUTY"}
+                    </p>
 
-              <p className="home-product-category">
-                Makeup
-              </p>
+                    <h3>
+                      {productName}
+                    </h3>
 
-              <h3>
-                Waterproof Mascara
-              </h3>
+                    {product.description && (
+                      <p>
+                        {product.description}
+                      </p>
+                    )}
 
-              <p>
-                Bold and beautiful lashes.
-              </p>
+                    <div className="home-product-bottom">
 
-              <Link to="/shop">
-                View Product
-              </Link>
+                      <span className="home-product-price">
+                        Rs.{" "}
+                        {Number(
+                          productPrice
+                        ).toLocaleString("en-PK")}
+                      </span>
 
-            </div>
+                      <Link
+                        to={`/product/${product._id}`}
+                      >
+                        View Product
+                      </Link>
 
-          </article>
+                    </div>
 
+                  </div>
 
-          <article className="home-product-card">
+                </article>
 
-            <div className="home-product-image">
-              <span>04</span>
-            </div>
+              );
+            })}
 
-            <div className="home-product-info">
+          </div>
 
-              <p className="home-product-category">
-                Skincare
-              </p>
+        ) : (
 
-              <h3>
-                Sunscreen
-              </h3>
+          <div className="home-empty-products">
 
-              <p>
-                Everyday protection for your skin.
-              </p>
+            <p>
+              BLISSBIX COSMETICS
+            </p>
 
-              <Link to="/shop">
-                View Product
-              </Link>
+            <h3>
+              No products available
+            </h3>
 
-            </div>
+            <Link to="/shop">
+              Visit Shop →
+            </Link>
 
-          </article>
+          </div>
 
-        </div>
+        )}
 
       </section>
 
 
-      {/* =========================
+      {/* =====================================================
           EDITORIAL BANNER
-      ========================= */}
+      ===================================================== */}
+
       <section className="home-editorial">
 
         <div className="home-editorial-inner">
@@ -313,18 +440,23 @@ function Home() {
       </section>
 
 
-      {/* =========================
+      {/* =====================================================
           SUBSCRIBE
-      ========================= */}
+      ===================================================== */}
+
       <section className="home-subscribe">
+
+        <p>
+          BLISSBIX COSMETICS
+        </p>
 
         <h2>
           Subscribe to get 10% Off
         </h2>
 
-        <p>
+        <span>
           Stay updated with new products and exclusive offers.
-        </p>
+        </span>
 
       </section>
 
