@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
+import { useAuth } from "../context/AuthContext";
 import "./Account.css";
 
 function Account() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,8 +23,8 @@ function Account() {
 
     const getUser = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/auth/me",
+        const response = await api.get(
+          "/auth/me",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -40,8 +42,7 @@ function Account() {
       } catch (error) {
         console.error("Account error:", error);
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        logout();
 
         setError(
           "Your session has expired. Please login again."
@@ -56,16 +57,14 @@ function Account() {
     };
 
     getUser();
-  }, [navigate]);
+  }, [logout, navigate]);
 
   // =====================================================
   // LOGOUT
   // =====================================================
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
+    logout();
     setUser(null);
 
     navigate("/login");

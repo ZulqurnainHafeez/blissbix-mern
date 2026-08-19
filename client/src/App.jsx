@@ -11,15 +11,18 @@ import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Account from "./pages/Account";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <WishlistProvider>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
 
           <Navbar />
 
@@ -43,18 +46,6 @@ function App() {
               element={<ProductDetails />}
             />
 
-            {/* CART */}
-            <Route
-              path="/cart"
-              element={<Cart />}
-            />
-
-            {/* WISHLIST */}
-            <Route
-              path="/wishlist"
-              element={<Wishlist />}
-            />
-
             {/* LOGIN */}
             <Route
               path="/login"
@@ -67,18 +58,24 @@ function App() {
               element={<Register />}
             />
 
-            {/* ACCOUNT */}
-            <Route
-              path="/account"
-              element={<Account />}
-            />
+            <Route element={<ProtectedRoute />}>
+              {/* CART */}
+              <Route path="/cart" element={<Cart />} />
+
+              {/* WISHLIST */}
+              <Route path="/wishlist" element={<Wishlist />} />
+
+              {/* ACCOUNT */}
+              <Route path="/account" element={<Account />} />
+            </Route>
 
           </Routes>
 
           <Footer />
 
-        </WishlistProvider>
-      </CartProvider>
+          </WishlistProvider>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

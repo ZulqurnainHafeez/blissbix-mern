@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 
 function Navbar() {
@@ -9,41 +10,9 @@ function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  // Logged-in user
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
 
   const inputRef = useRef(null);
-
-  // =====================================================
-  // CHECK LOGIN USER
-  // =====================================================
-
-  useEffect(() => {
-    const checkUser = () => {
-      const savedUser = localStorage.getItem("user");
-
-      if (savedUser) {
-        try {
-          setUser(JSON.parse(savedUser));
-        } catch (error) {
-          console.error("Invalid saved user:", error);
-          localStorage.removeItem("user");
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-    };
-
-    checkUser();
-
-    // Update navbar when login/logout happens
-    window.addEventListener("storage", checkUser);
-
-    return () => {
-      window.removeEventListener("storage", checkUser);
-    };
-  }, []);
 
   // =====================================================
   // SEARCH FOCUS
@@ -94,21 +63,6 @@ function Navbar() {
     } else {
       navigate("/login");
     }
-  };
-
-  // =====================================================
-  // LOGOUT
-  // =====================================================
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-
-    setUser(null);
-
-    setMobileMenuOpen(false);
-
-    navigate("/login");
   };
 
   // =====================================================

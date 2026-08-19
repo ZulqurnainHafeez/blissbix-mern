@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api";
+import { useAuth } from "../context/AuthContext";
 import "./Login.css";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -51,19 +53,7 @@ function Login() {
         password,
       });
 
-      if (response.data.user) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.user)
-        );
-      }
-
-      if (response.data.token) {
-        localStorage.setItem(
-          "token",
-          response.data.token
-        );
-      }
+      login(response.data.token, response.data.user);
 
       setMessage("Login successful!");
 
