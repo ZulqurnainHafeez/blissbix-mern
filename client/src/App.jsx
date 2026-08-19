@@ -11,6 +11,7 @@ import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Account from "./pages/Account";
+import Checkout from "./pages/Checkout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -67,6 +68,7 @@ function App() {
 
               {/* ACCOUNT */}
               <Route path="/account" element={<Account />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Route>
 
           </Routes>

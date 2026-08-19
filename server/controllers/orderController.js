@@ -58,8 +58,8 @@ const placeOrder = async (req, res) => {
 
       items.push({
         product: item.product._id,
-        size: item.size,
-        color: item.color,
+        size: item.size || "Standard",
+        color: item.color || "Default",
         quantity: item.quantity,
         price: item.product.price,
       });

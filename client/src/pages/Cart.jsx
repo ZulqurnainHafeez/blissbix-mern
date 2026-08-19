@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./Cart.css";
 
 function Cart() {
+  const navigate = useNavigate();
   const {
     cartItems,
     cartCount,
@@ -344,9 +345,7 @@ function Cart() {
           <button
             type="button"
             className="checkout-button"
-            onClick={() =>
-              alert("Checkout coming soon!")
-            }
+            onClick={() => navigate("/checkout")}
           >
             Proceed to Checkout
           </button>
