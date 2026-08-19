@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 import "./Login.css";
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function Login() {
   const navigate = useNavigate();
@@ -27,17 +29,28 @@ function Login() {
 
     setMessage("");
     setError("");
+
+    const email = formData.email.trim();
+    const password = formData.password.trim();
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData
-      );
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-      console.log("Login response:", response.data);
-
-      // Save logged-in user
       if (response.data.user) {
         localStorage.setItem(
           "user",
@@ -45,7 +58,6 @@ function Login() {
         );
       }
 
-      // Save token if your backend sends one
       if (response.data.token) {
         localStorage.setItem(
           "token",
@@ -55,16 +67,12 @@ function Login() {
 
       setMessage("Login successful!");
 
-      // Go to home page after login
       setTimeout(() => {
         navigate("/");
       }, 800);
-
-    } catch (error) {
-      console.error("Login error:", error);
-
+    } catch (err) {
       setError(
-        error.response?.data?.message ||
+        err.response?.data?.message ||
           "Login failed. Please check your email and password."
       );
     } finally {

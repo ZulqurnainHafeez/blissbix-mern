@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 import "./Register.css";
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function Register() {
   const navigate = useNavigate();
@@ -29,12 +31,21 @@ function Register() {
     setMessage("");
     setError("");
 
-    if (!formData.name || !formData.email || !formData.password) {
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const password = formData.password.trim();
+
+    if (!name || !email || !password) {
       setError("Please fill in all fields.");
       return;
     }
 
-    if (formData.password.length < 6) {
+    if (!emailPattern.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
@@ -42,10 +53,11 @@ function Register() {
     try {
       setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        formData
-      );
+      const response = await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
 
       setMessage(response.data.message || "Account created successfully!");
 
