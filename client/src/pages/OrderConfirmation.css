@@ -1,0 +1,161 @@
+.confirmation-page {
+  min-height: 100vh;
+  padding: 70px 20px 90px;
+  background: #f7f5f2;
+  color: #252321;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.confirmation-card {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 48px;
+  border: 1px solid #e2ddd8;
+  background: #fff;
+}
+
+.confirmation-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+  border-radius: 50%;
+  background: #252321;
+  color: #fff;
+  font-size: 22px;
+}
+
+.confirmation-eyebrow {
+  color: #8a817b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.confirmation-card h1 {
+  margin: 10px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 40px;
+  font-weight: 400;
+}
+
+.confirmation-message {
+  color: #756e69;
+  font-size: 13px;
+}
+
+.confirmation-meta {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 20px;
+  margin: 35px 0;
+  padding: 20px 0;
+  border-top: 1px solid #e5dfda;
+  border-bottom: 1px solid #e5dfda;
+}
+
+.confirmation-meta div,
+.confirmation-item div {
+  display: grid;
+  gap: 5px;
+}
+
+.confirmation-meta span,
+.confirmation-item span,
+.confirmation-address {
+  color: #77706a;
+  font-size: 11px;
+}
+
+.confirmation-meta strong {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.confirmation-items h2 {
+  margin: 0 0 18px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.confirmation-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee9e5;
+  font-size: 12px;
+}
+
+.confirmation-item > strong {
+  white-space: nowrap;
+}
+
+.confirmation-address {
+  display: grid;
+  gap: 5px;
+  margin: 24px 0 0;
+  padding: 18px;
+  background: #f7f5f2;
+}
+
+.confirmation-address strong {
+  color: #252321;
+}
+
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.confirmation-primary,
+.confirmation-secondary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid #252321;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.confirmation-primary {
+  background: #252321;
+  color: #fff;
+}
+
+.confirmation-secondary {
+  background: #fff;
+  color: #252321;
+}
+
+.confirmation-primary:hover,
+.confirmation-secondary:hover {
+  background: #e9e4df;
+  color: #252321;
+}
+
+@media (max-width: 600px) {
+  .confirmation-page {
+    padding: 35px 15px 60px;
+  }
+
+  .confirmation-card {
+    padding: 28px 20px;
+  }
+
+  .confirmation-card h1 {
+    font-size: 32px;
+  }
+
+  .confirmation-meta {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}

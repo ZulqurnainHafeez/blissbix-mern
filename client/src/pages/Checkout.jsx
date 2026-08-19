@@ -61,13 +61,32 @@ function Checkout() {
         values.postalCode,
       ].join(", ");
 
-      await api.post("/orders", {
+      const response = await api.post("/orders", {
         shippingAddress,
         paymentMethod,
       });
 
+      const order = {
+        ...response.data.order,
+        items: response.data.order.items.map((orderItem) => {
+          const cartItem = cartItems.find(
+            (item) => item.productId === orderItem.product
+          );
+
+          return {
+            ...orderItem,
+            product: {
+              _id: orderItem.product,
+              name: cartItem?.name || "Product",
+            },
+          };
+        }),
+      };
+
       clearCart();
-      navigate("/account");
+      navigate("/order-confirmation", {
+        state: { order },
+      });
     } catch (requestError) {
       setError(
         requestError.response?.data?.message ||
