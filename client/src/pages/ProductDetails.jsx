@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../api/api";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import "./ProductDetails.css";
 
 function ProductDetails() {
@@ -18,7 +19,10 @@ function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState(0);
 
   const [message, setMessage] = useState("");
-  const [wishlist, setWishlist] = useState([]);
+  const {
+    isInWishlist,
+    toggleWishlist,
+  } = useWishlist();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -65,26 +69,6 @@ function ProductDetails() {
 
     fetchProduct();
   }, [id]);
-
-  useEffect(() => {
-    try {
-      const savedWishlist =
-        JSON.parse(
-          localStorage.getItem(
-            "blissbix-wishlist"
-          )
-        ) || [];
-
-      setWishlist(savedWishlist);
-    } catch (error) {
-      console.error(
-        "Error loading wishlist:",
-        error
-      );
-
-      setWishlist([]);
-    }
-  }, []);
 
   const increaseQuantity = () => {
     if (
@@ -136,56 +120,14 @@ function ProductDetails() {
     }, 2500);
   };
 
-  const isWishlisted = wishlist.some(
-    (item) =>
-      item.productId === product?._id
-  );
+  const isWishlisted = isInWishlist(product?._id);
 
   const handleWishlist = () => {
     if (!product) return;
 
-    let updatedWishlist;
+    toggleWishlist(product);
 
-    if (isWishlisted) {
-      updatedWishlist =
-        wishlist.filter(
-          (item) =>
-            item.productId !==
-            product._id
-        );
-
-      setMessage(
-        "Removed from wishlist."
-      );
-    } else {
-      const wishlistItem = {
-        productId: product._id,
-        name: product.name,
-        price: product.price,
-        image:
-          product.images?.[0] || "",
-        category:
-          product.category,
-      };
-
-      updatedWishlist = [
-        ...wishlist,
-        wishlistItem,
-      ];
-
-      setMessage(
-        "Added to wishlist."
-      );
-    }
-
-    setWishlist(updatedWishlist);
-
-    localStorage.setItem(
-      "blissbix-wishlist",
-      JSON.stringify(
-        updatedWishlist
-      )
-    );
+    setMessage(isWishlisted ? "Removed from wishlist." : "Added to wishlist.");
 
     setTimeout(() => {
       setMessage("");

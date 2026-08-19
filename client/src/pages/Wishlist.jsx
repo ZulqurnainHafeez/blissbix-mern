@@ -1,63 +1,28 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import "./Wishlist.css";
 
 function Wishlist() {
-  const [wishlist, setWishlist] = useState([]);
+  const { addToCart } = useCart();
+  const {
+    wishlistItems: wishlist,
+    removeFromWishlist,
+    clearWishlist,
+  } = useWishlist();
 
-  /* =========================================================
-     LOAD WISHLIST
-  ========================================================= */
-
-  useEffect(() => {
-    loadWishlist();
-  }, []);
-
-  const loadWishlist = () => {
-    try {
-      const savedWishlist =
-        JSON.parse(
-          localStorage.getItem("blissbix-wishlist")
-        ) || [];
-
-      setWishlist(savedWishlist);
-    } catch (error) {
-      console.error(
-        "Error loading wishlist:",
-        error
-      );
-
-      setWishlist([]);
-    }
-  };
-
-  /* =========================================================
-     REMOVE ITEM
-  ========================================================= */
-
-  const removeFromWishlist = (productId) => {
-    const updatedWishlist = wishlist.filter(
-      (item) => item.productId !== productId
+  const moveToCart = (item) => {
+    addToCart(
+      {
+        _id: item.productId,
+        name: item.name,
+        price: item.price,
+        images: item.image ? [item.image] : [],
+        stock: item.stock || 1,
+      },
+      1
     );
-
-    setWishlist(updatedWishlist);
-
-    localStorage.setItem(
-      "blissbix-wishlist",
-      JSON.stringify(updatedWishlist)
-    );
-  };
-
-  /* =========================================================
-     CLEAR WISHLIST
-  ========================================================= */
-
-  const clearWishlist = () => {
-    setWishlist([]);
-
-    localStorage.removeItem(
-      "blissbix-wishlist"
-    );
+    removeFromWishlist(item.productId);
   };
 
   /* =========================================================
@@ -260,6 +225,14 @@ function Wishlist() {
                   >
                     View Product
                   </Link>
+
+                  <button
+                    type="button"
+                    className="wishlist-remove"
+                    onClick={() => moveToCart(item)}
+                  >
+                    Move to Cart
+                  </button>
 
                   <button
                     type="button"

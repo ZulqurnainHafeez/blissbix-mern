@@ -1,8 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import api from "../api/api";
+import { useAuth } from "./AuthContext";
 
 const WishlistContext = createContext();
 
 export function WishlistProvider({ children }) {
+  const { user } = useAuth();
   const [wishlistItems, setWishlistItems] = useState(() => {
     try {
       const savedWishlist = localStorage.getItem(
@@ -29,6 +32,26 @@ export function WishlistProvider({ children }) {
     );
   }, [wishlistItems]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    api.get("/wishlist")
+      .then((response) => {
+        const items = response.data.wishlist.map((item) => ({
+          wishlistId: item._id,
+          productId: item.product?._id || item.product,
+          name: item.product?.name || "Product",
+          price: item.product?.price || 0,
+          image: item.product?.images?.[0] || "",
+          category: item.product?.category || "",
+          description: item.product?.description || "",
+        }));
+
+        setWishlistItems(items);
+      })
+      .catch(() => {});
+  }, [user]);
+
   const isInWishlist = (productId) => {
     return wishlistItems.some(
       (item) => item.productId === productId
@@ -36,6 +59,10 @@ export function WishlistProvider({ children }) {
   };
 
   const addToWishlist = (product) => {
+    if (user) {
+      api.post("/wishlist", { product: product._id }).catch(() => {});
+    }
+
     setWishlistItems((currentItems) => {
       if (
         currentItems.some(
@@ -60,6 +87,10 @@ export function WishlistProvider({ children }) {
   };
 
   const removeFromWishlist = (productId) => {
+    if (user) {
+      api.delete(`/wishlist/${productId}`).catch(() => {});
+    }
+
     setWishlistItems((currentItems) =>
       currentItems.filter(
         (item) => item.productId !== productId
@@ -76,6 +107,13 @@ export function WishlistProvider({ children }) {
   };
 
   const clearWishlist = () => {
+    if (user) {
+      wishlistItems
+        .forEach((item) => {
+          api.delete(`/wishlist/${item.productId}`).catch(() => {});
+        });
+    }
+
     setWishlistItems([]);
   };
 

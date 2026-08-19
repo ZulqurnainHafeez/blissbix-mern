@@ -1,8 +1,16 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import api from "../api/api";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState(() => {
     try {
       const savedCart = localStorage.getItem("blissbix-cart");
@@ -18,8 +26,40 @@ export function CartProvider({ children }) {
     localStorage.setItem("blissbix-cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    api.get("/cart")
+      .then((response) => {
+        const items = response.data.cart.map((item) => ({
+          cartId: item._id,
+          productId: item.product?._id || item.product,
+          name: item.product?.name || "Product",
+          price: item.product?.price || 0,
+          image: item.product?.images?.[0] || "",
+          category: item.product?.category || "",
+          color: item.color || "",
+          size: item.size || "",
+          quantity: item.quantity,
+          stock: item.product?.stock || item.quantity,
+        }));
+
+        setCartItems(items);
+      })
+      .catch(() => {});
+  }, [user]);
+
   // Add product to cart
   const addToCart = (product, quantity = 1, color = "", size = "") => {
+    if (user) {
+      api.post("/cart", {
+        product: product._id,
+        quantity,
+        color,
+        size,
+      }).catch(() => {});
+    }
+
     setCartItems((currentItems) => {
       const existingItem = currentItems.find(
         (item) =>
@@ -62,6 +102,19 @@ export function CartProvider({ children }) {
 
   // Increase quantity
   const increaseQuantity = (productId, color = "", size = "") => {
+    const item = cartItems.find(
+      (cartItem) =>
+        cartItem.productId === productId &&
+        cartItem.color === color &&
+        cartItem.size === size
+    );
+
+    if (user && item?.cartId) {
+      api.put(`/cart/${item.cartId}`, {
+        quantity: item.quantity + 1,
+      }).catch(() => {});
+    }
+
     setCartItems((currentItems) =>
       currentItems.map((item) => {
         if (
@@ -82,6 +135,19 @@ export function CartProvider({ children }) {
 
   // Decrease quantity
   const decreaseQuantity = (productId, color = "", size = "") => {
+    const item = cartItems.find(
+      (cartItem) =>
+        cartItem.productId === productId &&
+        cartItem.color === color &&
+        cartItem.size === size
+    );
+
+    if (user && item?.cartId && item.quantity > 1) {
+      api.put(`/cart/${item.cartId}`, {
+        quantity: item.quantity - 1,
+      }).catch(() => {});
+    }
+
     setCartItems((currentItems) =>
       currentItems
         .map((item) => {
@@ -104,6 +170,17 @@ export function CartProvider({ children }) {
 
   // Remove item
   const removeFromCart = (productId, color = "", size = "") => {
+    const item = cartItems.find(
+      (cartItem) =>
+        cartItem.productId === productId &&
+        cartItem.color === color &&
+        cartItem.size === size
+    );
+
+    if (user && item?.cartId) {
+      api.delete(`/cart/${item.cartId}`).catch(() => {});
+    }
+
     setCartItems((currentItems) =>
       currentItems.filter(
         (item) =>
@@ -118,6 +195,14 @@ export function CartProvider({ children }) {
 
   // Clear entire cart
   const clearCart = () => {
+    if (user) {
+      cartItems
+        .filter((item) => item.cartId)
+        .forEach((item) => {
+          api.delete(`/cart/${item.cartId}`).catch(() => {});
+        });
+    }
+
     setCartItems([]);
   };
 
